@@ -1,0 +1,53 @@
+{% load staticfiles %}
+
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- Required tags for bootstrap -->
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Meta -->
+	<meta name="author" content="Shane Rice"/>
+	<meta name="title" content="My Robinhood Web"/>
+	<meta name="description" content="My Robinhood Web is a web interface to interact with Robinhood."/>
+
+	<meta property="og:author" content="Shane Rice">
+	<meta property="og:title" content="My Robinhood Web">
+	<meta property="og:description" content="DjangoMy Robinhood Web is a web interface to interact with Robinhood.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'v_home' %}">
+	<meta property="og:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/logo.jpg' %}">
+	<meta property="og:image:type" content="image/png">
+
+	<title>My Robinhood Web - {% block title %}{% endblock %}</title>
+
+	<!-- Media -->
+	<link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+	<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'font-awesome/css/fontawesome-all.min.css' %}" rel="stylesheet">
+
+	{% block head %}{% endblock %}
+</head>
+<body>
+
+<!-- Main content -->
+<div class="container">
+	<div class="col-sm">
+        <!-- Heading blocked below so it can be disabled -->
+		{% block heading %}
+			<h1 class="text-center">My Robinhood Web</h1>
+		{% endblock %}
+		<!-- Page content imported below in body block -->
+		{% block body %}{% endblock %}
+	</div>
+</div>
+
+<!-- JS imported at end to improve page loads -->
+<script type="text/javascript" src="{% static 'bootstrap/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/popper.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+[django]
+debug           = True
+secret          = xxxxxxxxxx
+allowed_hosts   = *
+language_code   = en-us
+time_zone       = UTC
+static_root     = C:\tmp
+sqlite_db       = db.sqlite3
+
+[logging]
+app_level       = DEBUG
+app_handler     = console
+django_level    = INFO
+django_handler  = console
+log_file        = django.log
+
+[database]
+name            = database
+user            = database
+pass            = xxxxxxxxxx
+host            = mysql
+port            = 3306
+
+[app]
+api_token       = xxxxxxxxxx
+client_id       = xxxxxxxxxx
+client_secret   = xxxxxxxxxx
+redirect_uris   = null

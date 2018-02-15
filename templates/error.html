@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+{% block error_active %}active{% endblock %}
+{% block title %}Error{% endblock %}
+
+{% block head %}
+	<!-- Place page specific head code here -->
+{% endblock %}
+
+{% block body %}
+	<!-- Place page specific body code here -->
+
+    <h1>Oops, Error...</h1>
+
+    {% if messages %}
+        <p></p>
+        {% for message in messages %}
+            <div class="alert alert-{{ message.extra_tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}

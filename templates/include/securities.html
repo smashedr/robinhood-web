@@ -1,0 +1,45 @@
+{% load rhweb_tags %}
+
+<div class="row">
+    {% for security in securities %}
+
+        {% if security.security %}
+
+            <div class="col-sm-4">
+                <div class="card mt-3 {{ security|card_class }}">
+                    <div class="card-body">
+
+                        <h5 class="card-title">{{ security.security.simple_name }} ({{ security.security.symbol }})</h5>
+                        <h6 class="card-subtitle mb-2">{{ security.security.name }}</h6>
+                        <p class="card-text">
+                            Shares: {{ security.quantity }}<br>
+                            Average Price: {{ security.average_buy_price }}<br>
+                            Last Trade Price: {{ security.quote.last_trade_price }}<br>
+                        </p>
+                        <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ security.security.symbol }}"
+                           class="btn btn-primary" target="_blank">
+                            Bulls
+                        </a>
+                        <a href="https://www.tradingview.com/symbols/NYSE-{{ security.security.symbol }}/"
+                           class="btn btn-primary" target="_blank">
+                            TV
+                        </a>
+                        <a href="https://stocktwits.com/symbol/{{ security.security.symbol }}/"
+                           class="btn btn-primary" target="_blank">
+                            ST
+                        </a>
+                        <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ security.security.symbol }}"
+                           class="btn btn-primary" target="_blank">
+                            CNN
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            <p>Security not found for instrument: {{ security.instrument }}</p>
+        {% endif %}
+
+    {% endfor %}
+</div>

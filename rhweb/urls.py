@@ -11,7 +11,7 @@ urlpatterns = [
         url=static('images/favicon.ico')
     )),
     path('', home.v_home, name='v_home'),
-    path('error/', home.v_error, name='v_error'),
+    path('share/<str:share_id>', home.v_share, name='v_share'),
     path('login/', auth.show_login, name='show_login'),
     path('auth/', auth.do_login, name='do_login'),
     path('logout/', auth.do_logout, name='do_logout'),

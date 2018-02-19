@@ -16,8 +16,8 @@
 	<meta property="og:title" content="My Robinhood Web">
 	<meta property="og:description" content="DjangoMy Robinhood Web is a web interface to interact with Robinhood.">
 	<meta property="og:type" content="website">
-	<meta property="og:url" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'v_home' %}">
-	<meta property="og:image" content="{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% static 'images/logo.jpg' %}">
+	<meta property="og:url" content="https://{{ request.META.HTTP_HOST }}{% url 'v_home' %}">
+	<meta property="og:image" content="https://{{ request.META.HTTP_HOST }}{% static 'images/logo.jpg' %}">
 	<meta property="og:image:type" content="image/png">
 
 	<title>My Robinhood Web - {% block title %}{% endblock %}</title>
@@ -34,14 +34,31 @@
 
 <!-- Main content -->
 <div class="container-fluid">
-	<div class="col-sm">
-        <!-- Heading blocked below so it can be disabled -->
-		{% block heading %}
-			<h1 class="text-center">My Robinhood Web</h1>
-		{% endblock %}
-		<!-- Page content imported below in body block -->
-		{% block body %}{% endblock %}
-	</div>
+
+    {% block heading %}
+        <div class="row">
+            <div class="col text-center">
+                <h1>My Robinhood Web</h1>
+            </div>
+        </div>
+
+        {% if messages %}
+            <div class="row">
+                <div class="col text-center">
+                    <p></p>
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.extra_tags }}" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+    {% endblock %}
+
+    {% block body %}{% endblock %}
+
 </div>
 
 <!-- JS imported at end to improve page loads -->

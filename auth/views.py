@@ -51,21 +51,20 @@ def do_login(request):
             else:
                 raise ValueError('Login failed.')
         else:
-            return msg_redirect(
-                request, messages.WARNING, 'danger',  'show_login',
+            messages.add_message(
+                request, messages.WARNING,
                 'Incorrect User/Pass. Please Try Again.',
+                extra_tags='danger',
             )
+            return redirect('show_login')
     except Exception as error:
         logger.exception(error)
-        return msg_redirect(
-            request, messages.WARNING, 'danger',  'show_login',
+        messages.add_message(
+            request, messages.WARNING,
             'Error: {}'.format(error),
+            extra_tags='danger',
         )
-
-
-def msg_redirect(request, msg_type, tags, location, message):
-    messages.add_message(request, msg_type, message, extra_tags=tags)
-    return redirect(location)
+        return redirect('show_login')
 
 
 def login_user(request, username):
@@ -110,25 +109,3 @@ def get_next_url(request):
 def encode_pw(key, clear):
     cipher_suite = Fernet(key)
     return cipher_suite.encrypt(clear.encode())
-
-
-def log_req(request):
-    """
-    DEBUGGING ONLY
-    """
-    data = ''
-    if request.method == 'GET':
-        data = 'GET: '
-        for key, value in request.GET.items():
-            data += '"%s": "%s", ' % (key, value)
-    if request.method == 'POST':
-        data = 'POST: '
-        for key, value in request.POST.items():
-            data += '"%s": "%s", ' % (key, value)
-    if data:
-        data = data.strip(', ')
-        logger.info(data)
-        json_string = '{%s}' % data
-        return json_string
-    else:
-        return None

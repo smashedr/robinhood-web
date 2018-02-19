@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 {% block home_active %}active{% endblock %}
-{% block title %}Home{% endblock %}
+{% block title %}{{ data.share_id }}{% endblock %}
 
 {% block head %}
 	<!-- Place page specific head code here -->
@@ -10,11 +10,7 @@
 
     <div class="row">
         <div class="col">
-            <p>
-                Share Link: <a target="_blank"
-                    href="https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}">
-                    https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}</a>
-            </p>
+            <p>Data Generated: <mark> {{ data.generated_at }} UTC</mark></p>
         </div>
     </div>
 

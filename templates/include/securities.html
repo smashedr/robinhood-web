@@ -6,13 +6,19 @@
             {% with price=security.average_buy_price|round_it shares=security.quantity|round_it:0 last=security.quote.last_trade_price|round_it %}
 
             <div class="col-lg-4">
-                <div class="card mt-3 {{ security|card_class }}">
-                    <div class="card-header">
+                <div class="card mt-2 mb-2 {{ security|card_class }}">
+                    <div class="card-header p-2">
                         <div class="float-left">{{ shares }} - <strong>{{ security.security.symbol }}</strong></div>
                         <div class="text-right">${% my_profit price last shares %}</div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title float-left">{{ security.security.simple_name }}</h5>
+                    <div class="card-body p-2">
+                        <h5 class="card-title float-left">
+                            {% if security.security.simple_name == None %}
+                                {{ security.security.name|truncatechars:20 }}
+                            {% else %}
+                                {{ security.security.simple_name }}
+                            {% endif %}
+                        </h5>
                         <h5 class="card-title text-right">${{ last }}</h5>
 
                         <table class="table table-sm">
@@ -27,14 +33,40 @@
                                 <td><strong>${% my_multiply last shares %}</strong></td>
                             </tr>
                         </table>
-                        <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ security.security.symbol }}"
-                           class="btn btn-primary" target="_blank">Bulls</a>
-                        <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ security.security.symbol }}"
-                           class="btn btn-primary" target="_blank">CNN</a>
-                        <a href="https://www.tradingview.com/symbols/NYSE-{{ security.security.symbol }}/"
-                           class="btn btn-primary" target="_blank">TV</a>
-                        <a href="https://stocktwits.com/symbol/{{ security.security.symbol }}/"
-                           class="btn btn-primary" target="_blank">ST</a>
+                        <div>
+                            <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ security.security.symbol }}"
+                               class="btn btn-sm btn-primary" target="_blank">Bulls</a>
+                            <a href="http://caps.fool.com/Ticker/{{ security.security.symbol }}.aspx"
+                               class="btn btn-sm btn-primary" target="_blank">Fool</a>
+                            <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ security.security.symbol }}"
+                               class="btn btn-sm btn-primary" target="_blank">CNN</a>
+                            <a href="https://stocktwits.com/symbol/{{ security.security.symbol }}/"
+                               class="btn btn-sm btn-primary" target="_blank">ST</a>
+                            <a href="https://www.tradingview.com/symbols/NYSE-{{ security.security.symbol }}/"
+                               class="btn btn-sm btn-primary" target="_blank">TV</a>
+                        </div>
+                        <div>
+                            <span class="small">
+                                <a href="{{ security.security.fundamentals }}" target="_blank">
+                                    Fundamentals
+                                </a>
+                                <a href="#" class="copy-data" data-clipboard-text="{{ security.security.fundamentals }}">
+                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                </a> |
+                                <a href="{{ security.instrument }}" target="_blank">
+                                    Instruments
+                                </a>
+                                <a href="#" class="copy-data" data-clipboard-text="{{ security.instrument }}">
+                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                </a> |
+                                <a href="{{ security.security.quote }}" target="_blank">
+                                    Quote
+                                </a>
+                                <a href="#" class="copy-data" data-clipboard-text="{{ security.security.quote }}">
+                                    <i class="fa fa-link" aria-hidden="true"></i>
+                                </a>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>

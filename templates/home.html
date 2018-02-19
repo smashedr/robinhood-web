@@ -14,6 +14,10 @@
                 Share Link: <a target="_blank"
                     href="https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}">
                     https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}</a>
+
+                <a href="#" class="copy-data" data-clipboard-text="https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}">
+                    <i class="fa fa-link" aria-hidden="true"></i>
+                </a>
             </p>
         </div>
     </div>

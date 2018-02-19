@@ -13,3 +13,22 @@ def card_class(security):
         return 'text-white bg-success'
     else:
         return 'text-white bg-danger'
+
+
+@register.filter(name='round_it')
+def round_it(value, decimal=2):
+    if decimal == 0:
+        return int(float(value))
+    return round(float(value), decimal)
+
+
+@register.simple_tag(name='my_multiply')
+def my_multiply(value1, value2, decimal=2):
+    m = float(value1) * float(value2)
+    return round(m, decimal)
+
+
+@register.simple_tag(name='my_profit')
+def my_profit(price, last, shares, decimal=2):
+    p = (float(last) * float(shares)) - (float(price) * float(shares))
+    return round(p, decimal)

@@ -2,44 +2,48 @@
 
 <div class="row">
     {% for security in securities %}
-
         {% if security.security %}
+            {% with price=security.average_buy_price|round_it shares=security.quantity|round_it:0 last=security.quote.last_trade_price|round_it %}
 
-            <div class="col-sm-4">
+            <div class="col-lg-4">
                 <div class="card mt-3 {{ security|card_class }}">
+                    <div class="card-header">
+                        <div class="float-left">{{ shares }} - <strong>{{ security.security.symbol }}</strong></div>
+                        <div class="text-right">${% my_profit price last shares %}</div>
+                    </div>
                     <div class="card-body">
+                        <h5 class="card-title float-left">{{ security.security.simple_name }}</h5>
+                        <h5 class="card-title text-right">${{ last }}</h5>
 
-                        <h5 class="card-title">{{ security.security.simple_name }} ({{ security.security.symbol }})</h5>
-                        <h6 class="card-subtitle mb-2">{{ security.security.name }}</h6>
-                        <p class="card-text">
-                            Shares: {{ security.quantity }}<br>
-                            Average Price: {{ security.average_buy_price }}<br>
-                            Last Trade Price: {{ security.quote.last_trade_price }}<br>
-                        </p>
+                        <table class="table table-sm">
+                            <tr>
+                                <td>Cost:</td>
+                                <td>${{ price }} x {{ shares }}</td>
+                                <td>${% my_multiply price shares %}</td>
+                            </tr>
+                            <tr>
+                                <td>Equity: </td>
+                                <td>${{ last }} x {{ shares }}</td>
+                                <td><strong>${% my_multiply last shares %}</strong></td>
+                            </tr>
+                        </table>
                         <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ security.security.symbol }}"
-                           class="btn btn-primary" target="_blank">
-                            Bulls
-                        </a>
-                        <a href="https://www.tradingview.com/symbols/NYSE-{{ security.security.symbol }}/"
-                           class="btn btn-primary" target="_blank">
-                            TV
-                        </a>
-                        <a href="https://stocktwits.com/symbol/{{ security.security.symbol }}/"
-                           class="btn btn-primary" target="_blank">
-                            ST
-                        </a>
+                           class="btn btn-primary" target="_blank">Bulls</a>
                         <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ security.security.symbol }}"
-                           class="btn btn-primary" target="_blank">
-                            CNN
-                        </a>
-
+                           class="btn btn-primary" target="_blank">CNN</a>
+                        <a href="https://www.tradingview.com/symbols/NYSE-{{ security.security.symbol }}/"
+                           class="btn btn-primary" target="_blank">TV</a>
+                        <a href="https://stocktwits.com/symbol/{{ security.security.symbol }}/"
+                           class="btn btn-primary" target="_blank">ST</a>
                     </div>
                 </div>
             </div>
 
+            {% endwith %}
         {% else %}
-            <p>Security not found for instrument: {{ security.instrument }}</p>
-        {% endif %}
 
+            <p>Security not found for instrument: {{ security.instrument }}</p>
+
+        {% endif %}
     {% endfor %}
 </div>

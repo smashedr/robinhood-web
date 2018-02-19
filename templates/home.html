@@ -19,13 +19,12 @@
         </div>
     {% endif %}
 
+    <div class="row">
     {% for security in securities %}
 
         {% if security.security %}
 
-            {% if not forloop.counter|divisibleby:2 %}<div class="row">{% endif %}
-
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <div class="card mt-3 {{ security|card_class }}">
                     <div class="card-body">
 
@@ -57,11 +56,11 @@
                 </div>
             </div>
 
-            {% if forloop.counter|divisibleby:2 %}</div>{% endif %}
         {% else %}
             <p>Security not found for instrument: {{ security.instrument }}</p>
         {% endif %}
 
     {% endfor %}
+    </div>
 
 {% endblock %}

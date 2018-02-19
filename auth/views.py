@@ -1,3 +1,4 @@
+from cryptography.fernet import Fernet
 import logging
 from django.contrib.auth import login, logout
 from django.contrib import messages
@@ -15,7 +16,6 @@ def show_login(request):
     """
     View  /login/
     """
-    log_req(request)
     request.session['login_next_url'] = get_next_url(request)
     return render(request, 'login.html')
 
@@ -25,7 +25,6 @@ def do_logout(request):
     """
     View  /logout/
     """
-    log_req(request)
     next_url = get_next_url(request)
     logout(request)
     request.session['login_next_url'] = next_url
@@ -37,15 +36,18 @@ def do_login(request):
     """
     View  /auth/
     """
-    log_req(request)
     try:
         _username = request.POST.get('username')
         _password = request.POST.get('password')
         rh = get_rh(_username, _password)
         if rh:
             if login_user(request, _username):
-                request.session['password'] = _password
-                return HttpResponseRedirect(get_next_url(request))
+                key = Fernet.generate_key()
+                pw_hash = encode_pw(key, _password)
+                request.session['pw_hash'] = pw_hash.decode()
+                response = HttpResponseRedirect(get_next_url(request))
+                response.set_cookie('pw_key', key.decode())
+                return response
             else:
                 raise ValueError('Login failed.')
         else:
@@ -103,6 +105,11 @@ def get_next_url(request):
     if '?next=' in next_url:
         next_url = next_url.split('?next=')[1]
     return next_url
+
+
+def encode_pw(key, clear):
+    cipher_suite = Fernet(key)
+    return cipher_suite.encrypt(clear.encode())
 
 
 def log_req(request):

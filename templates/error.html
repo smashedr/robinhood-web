@@ -15,7 +15,7 @@
         <p></p>
         {% for message in messages %}
             <div class="alert alert-{{ message.extra_tags }}" role="alert">
-                {{ message }}
+                {{ message|safe }}
             </div>
         {% endfor %}
     {% endif %}

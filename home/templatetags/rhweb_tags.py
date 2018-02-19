@@ -13,4 +13,3 @@ def card_class(security):
         return 'text-white bg-success'
     else:
         return 'text-white bg-danger'
-

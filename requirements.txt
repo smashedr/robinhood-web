@@ -1,3 +1,4 @@
+cryptography
 django<3
 requests
 requests_cache

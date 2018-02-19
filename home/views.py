@@ -1,3 +1,4 @@
+from cryptography.fernet import Fernet
 import logging
 import requests
 import requests_cache
@@ -19,10 +20,12 @@ def v_home(request):
     View  /
     """
     try:
-        log_req(request)
-        rh = get_rh(request.user.username, request.session['password'])
+        _password = decode_pw(
+            request.COOKIES['pw_key'].encode(),
+            request.session['pw_hash'].encode(),
+        )
+        rh = get_rh(request.user.username, _password)
         securities = get_securities(rh.securities_owned()['results'])
-        logger.info(securities)
         return render(request, 'home.html', {'securities': securities})
     except Exception as error:
         logger.exception(error)
@@ -48,7 +51,6 @@ def get_security(instrument):
     if r.status_code == 200:
         return r.json()
     else:
-        logger.error(r.content.decode('utf-8'))
         return None
 
 
@@ -57,7 +59,6 @@ def get_fundamental(fundamental):
     if r.status_code == 200:
         return r.json()
     else:
-        logger.error(r.content.decode('utf-8'))
         return None
 
 
@@ -66,7 +67,6 @@ def get_quote(quote):
     if r.status_code == 200:
         return r.json()
     else:
-        logger.error(r.content.decode('utf-8'))
         return None
 
 
@@ -84,17 +84,22 @@ def msg_redirect(request, msg_type, tags, location, message):
     return redirect(location)
 
 
-def get_rh(username, password):
+def get_rh(username, _password):
     with requests_cache.disabled():
         rh = Robinhood()
         l = rh.login(
             username=username,
-            password=password,
+            password=_password,
         )
         if l:
             return rh
         else:
             return None
+
+
+def decode_pw(key, enc):
+    cipher_suite = Fernet(key)
+    return cipher_suite.decrypt(enc)
 
 
 def log_req(request):

@@ -36,6 +36,28 @@
 <div class="container-fluid">
 
     {% block heading %}
+        <div class="row mt-2">
+            <div class="col">
+                <div class="float-left">
+                    <a href="{% url 'v_home' %}" class="btn btn-primary btn-sm" role="button">
+                        Home
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="float-right text-right">
+                    {% if request.user.is_authenticated %}
+                        <a href="" class="log-out btn btn-danger btn-sm" role="button" type="submit">
+                            Log Out
+                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        </a>
+                        Logged in as: <strong><mark>{{ request.user.username|truncatechars:8 }}</mark></strong>
+                    {% else %}
+                        <p>You are not logged in...</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col text-center">
                 <h1>My Robinhood Web</h1>
@@ -60,6 +82,13 @@
     {% block body %}{% endblock %}
 
 </div>
+
+{% if request.user.is_authenticated %}
+    <form id="log-out" action="{% url 'do_logout' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    </form>
+{% endif %}
 
 <!-- JS imported at end to improve page loads -->
 <script type="text/javascript" src="{% static 'bootstrap/jquery.min.js' %}"></script>

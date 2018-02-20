@@ -7,4 +7,10 @@ $(document).ready(function() {
         event.preventDefault();
     });
 
+    // Log Out Form Activator Button
+    $('.log-out').click(function () {
+        $('#log-out').submit();
+        return false;
+    });
+
 });

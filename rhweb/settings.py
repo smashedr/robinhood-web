@@ -18,6 +18,7 @@ STATIC_URL = '/static/'
 TEMPLATES_DIRS = [os.path.join(BASE_DIR, 'templates')]
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+SESSION_COOKIE_AGE = int(CONFIG['django']['session_age'])
 ALLOWED_HOSTS = CONFIG['django']['allowed_hosts'].split(' ')
 DEBUG = strtobool(CONFIG['django']['debug'])
 SECRET_KEY = CONFIG['django']['secret']

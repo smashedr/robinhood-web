@@ -6,6 +6,7 @@ language_code   = en-us
 time_zone       = UTC
 static_root     = C:\tmp
 sqlite_db       = db.sqlite3
+session_age     = 1209600
 
 [logging]
 app_level       = DEBUG

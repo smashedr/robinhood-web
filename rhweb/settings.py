@@ -42,11 +42,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': CONFIG['database']['db_name'],
-            'USER': CONFIG['database']['db_user'],
-            'PASSWORD': CONFIG['database']['db_pass'],
-            'HOST': CONFIG['database']['db_host'],
-            'PORT': CONFIG['database']['db_port'],
+            'NAME': CONFIG['database']['name'],
+            'USER': CONFIG['database']['user'],
+            'PASSWORD': CONFIG['database']['pass'],
+            'HOST': CONFIG['database']['host'],
+            'PORT': CONFIG['database']['port'],
         }
     }
 

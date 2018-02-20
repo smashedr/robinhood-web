@@ -21,9 +21,3 @@ user            = database
 pass            = xxxxxxxxxx
 host            = mysql
 port            = 3306
-
-[app]
-api_token       = xxxxxxxxxx
-client_id       = xxxxxxxxxx
-client_secret   = xxxxxxxxxx
-redirect_uris   = null

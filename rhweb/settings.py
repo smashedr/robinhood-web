@@ -31,17 +31,24 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': CONFIG['database']['db_name'],
-        'USER': CONFIG['database']['db_user'],
-        'PASSWORD': CONFIG['database']['db_pass'],
-        'HOST': CONFIG['database']['db_host'],
-        'PORT': CONFIG['database']['db_port'],
+if 'sqlite_db' in CONFIG['django']:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': CONFIG['database']['db_name'],
+            'USER': CONFIG['database']['db_user'],
+            'PASSWORD': CONFIG['database']['db_pass'],
+            'HOST': CONFIG['database']['db_host'],
+            'PORT': CONFIG['database']['db_port'],
+        }
+    }
 
 LOGGING = {
     'version': 1,

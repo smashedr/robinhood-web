@@ -1,6 +1,7 @@
 cryptography
 django<3
 gunicorn
+mysqlclient
 requests
 requests_cache
 six>=1.10.0,<=1.11.0

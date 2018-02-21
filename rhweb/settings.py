@@ -32,10 +32,14 @@ USE_L10N = True
 USE_TZ = True
 
 if 'sqlite_db' in CONFIG['django']:
+    if CONFIG['django']['sqlite_db'].startswith('/'):
+        db_file = CONFIG['django']['sqlite_db']
+    else:
+        db_file = os.path.join(BASE_DIR, CONFIG['django']['sqlite_db'])
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': db_file,
         }
     }
 else:

@@ -9,16 +9,25 @@
 {% block body %}
 
     <div class="row">
+        <div class="col text-center">
+            <h1>My Robinhood</h1>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col">
-            <p>
-                Share Link: <a target="_blank"
+            <div class="float-left">
+                Hello <strong>{{ request.user.username|truncatechars:8 }}</strong>
+            </div>
+            <div class="float-right">
+                Share: <a target="_blank"
                     href="https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}">
                     https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}</a>
 
                 <a href="#" class="copy-data" data-clipboard-text="https://{{ request.META.HTTP_HOST }}{% url 'v_share' share_id=data.share_id %}">
                     <i class="fa fa-link" aria-hidden="true"></i>
                 </a>
-            </p>
+            </div>
         </div>
     </div>
 

@@ -39,28 +39,28 @@
         <div class="row mt-2">
             <div class="col">
                 <div class="float-left">
-                    <a href="{% url 'v_home' %}" class="btn btn-primary btn-sm" role="button">
+                    <a href="{% url 'v_home' %}" class="btn btn-info btn-sm" role="button">
                         Home
                         <i class="fa fa-home" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://share.robinhood.com/shaner195" class="btn btn-success btn-sm" role="button" target="_blank">
+                        Get a Free Stock
+                        <i class="fas fa-dollar-sign"></i>
                     </a>
                 </div>
                 <div class="float-right text-right">
                     {% if request.user.is_authenticated %}
                         <a href="" class="log-out btn btn-danger btn-sm" role="button" type="submit">
                             Log Out
-                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            <i class="fas fa-sign-out-alt"></i>
                         </a>
-                        Logged in as: <strong><mark>{{ request.user.username|truncatechars:8 }}</mark></strong>
                     {% else %}
-                        <p>You are not logged in...</p>
+                        <a href="{% url 'v_home' %}" class="btn btn-secondary btn-sm" role="button" type="submit">
+                            Log In
+                            <i class="fas fa-sign-in-alt"></i>
+                        </a>
                     {% endif %}
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col text-center">
-                <h1>My Robinhood Web</h1>
             </div>
         </div>
 
@@ -95,6 +95,7 @@
 <script type="text/javascript" src="{% static 'bootstrap/popper.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'clipboardjs/clipboard.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'font-awesome/js/fontawesome-all.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
 </body>

@@ -12,7 +12,7 @@ urlpatterns = [
         url=static('images/favicon.ico')
     )),
     path('', home.home_view, name='home_view'),
-    path('share/<str:share_id>', home.v_share, name='v_share'),
+    path('share/<str:share_id>', home.share_view, name='share_view'),
     path('stock/', stock.home_view, name='stock_home'),
     path('stock/<str:symbol>/', stock.stock_view, name='stock_view'),
     path('search/', stock.stock_search, name='stock_search'),

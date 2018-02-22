@@ -53,7 +53,7 @@ def home_view(request):
 
 
 @require_http_methods(["GET"])
-def v_share(request, share_id):
+def share_view(request, share_id):
     """
     View  /share/<share_id>/
     """

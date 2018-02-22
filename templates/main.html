@@ -71,7 +71,7 @@
                             <i class="fas fa-sign-out-alt"></i>
                         </a>
                     {% else %}
-                        <a href="{% url 'home_view' %}" class="btn btn-secondary btn-sm" role="button" type="submit">
+                        <a href="{% url 'show_login' %}?next={{ request.path }}" class="btn btn-secondary btn-sm" role="button" type="submit">
                             Log In
                             <i class="fas fa-sign-in-alt"></i>
                         </a>

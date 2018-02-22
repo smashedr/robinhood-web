@@ -10,8 +10,10 @@
 	<!-- Meta -->
 	<meta name="author" content="Shane Rice"/>
 	<meta name="title" content="My Robinhood Web"/>
-	<meta name="description" content="My Robinhood Web is a web interface to interact with Robinhood."/>
+	<meta name="description" content="My Robinhood Web with detailed holdings information."/>
 
+    <meta property="og:author" content="Shane Rice">
+    {% block og_tags %}
 	<meta property="og:author" content="Shane Rice">
 	<meta property="og:title" content="My Robinhood Web">
 	<meta property="og:description" content="My Robinhood Web is a web interface to interact with Robinhood.">
@@ -19,6 +21,7 @@
 	<meta property="og:url" content="https://{{ request.META.HTTP_HOST }}{% url 'home_view' %}">
 	<meta property="og:image" content="https://{{ request.META.HTTP_HOST }}{% static 'images/logo.jpg' %}">
 	<meta property="og:image:type" content="image/png">
+    {% endblock %}
 
 	<title>My Robinhood Web - {% block title %}{% endblock %}</title>
 

@@ -1,6 +1,16 @@
 {% extends "main.html" %}
+{% load staticfiles %}
 {% block home_active %}active{% endblock %}
-{% block title %}{{ data.share_id }}{% endblock %}
+{% block title %}Share - {{ data.share_id }}{% endblock %}
+
+{% block og_tags %}
+    <meta property="og:title" content="{{ data.share_id }}'s Robinhood">
+    <meta property="og:description" content="View {{ data.share_id }}'s Robinhood account and holdings.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://{{ request.META.HTTP_HOST }}{{ request.path }}">
+    <meta property="og:image" content="https://{{ request.META.HTTP_HOST }}{% static 'images/graph.jpg' %}">
+    <meta property="og:image:type" content="image/png">
+{% endblock %}
 
 {% block head %}
 	<!-- Place page specific head code here -->

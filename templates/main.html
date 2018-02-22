@@ -55,7 +55,7 @@
                         <form method="post" action="{% url 'stock_search' %}">
                             {% csrf_token %}
                             <div class="input-group input-group-sm col-8">
-                                <input type="text" class="form-control" placeholder="AMZN" name="symbol">
+                                <input type="text" class="form-control" placeholder="{% if stock.symbol %}{{ stock.symbol }}{% else %}AMZN{% endif %}" name="symbol">
                             <span class="input-group-sm">
                                 <button class="btn btn-secondary btn-sm" type="submit"><i class="fas fa-chart-bar"></i></button>
                             </span>

@@ -16,7 +16,7 @@
 	<meta property="og:title" content="My Robinhood Web">
 	<meta property="og:description" content="My Robinhood Web is a web interface to interact with Robinhood.">
 	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://{{ request.META.HTTP_HOST }}{% url 'v_home' %}">
+	<meta property="og:url" content="https://{{ request.META.HTTP_HOST }}{% url 'home_view' %}">
 	<meta property="og:image" content="https://{{ request.META.HTTP_HOST }}{% static 'images/logo.jpg' %}">
 	<meta property="og:image:type" content="image/png">
 
@@ -39,7 +39,7 @@
         <div class="row mt-2">
             <div class="col">
                 <div class="float-left">
-                    <a href="{% url 'v_home' %}" class="btn btn-info btn-sm" role="button">
+                    <a href="{% url 'home_view' %}" class="btn btn-info btn-sm" role="button">
                         Home
                         <i class="fa fa-home" aria-hidden="true"></i>
                     </a>
@@ -47,6 +47,19 @@
                         Get a Free Stock
                         <i class="fas fa-dollar-sign"></i>
                     </a>
+                    {% block stock_search %}
+                        <div class="float-right">
+                        <form method="post" action="{% url 'stock_search' %}">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm col-8">
+                                <input type="text" class="form-control" placeholder="AMZN" name="symbol">
+                            <span class="input-group-sm">
+                                <button class="btn btn-secondary btn-sm" type="submit"><i class="fas fa-chart-bar"></i></button>
+                            </span>
+                            </div>
+                        </form>
+                        </div>
+                    {% endblock %}
                 </div>
                 <div class="float-right text-right">
                     {% if request.user.is_authenticated %}
@@ -55,7 +68,7 @@
                             <i class="fas fa-sign-out-alt"></i>
                         </a>
                     {% else %}
-                        <a href="{% url 'v_home' %}" class="btn btn-secondary btn-sm" role="button" type="submit">
+                        <a href="{% url 'home_view' %}" class="btn btn-secondary btn-sm" role="button" type="submit">
                             Log In
                             <i class="fas fa-sign-in-alt"></i>
                         </a>

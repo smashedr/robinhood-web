@@ -5,13 +5,17 @@ from django.views.generic.base import RedirectView
 
 import auth.views as auth
 import home.views as home
+import stock.views as stock
 
 urlpatterns = [
     path('favicon\.ico', RedirectView.as_view(
         url=static('images/favicon.ico')
     )),
-    path('', home.v_home, name='v_home'),
+    path('', home.home_view, name='home_view'),
     path('share/<str:share_id>', home.v_share, name='v_share'),
+    path('stock/', stock.home_view, name='stock_home'),
+    path('stock/<str:symbol>/', stock.stock_view, name='stock_view'),
+    path('search/', stock.stock_search, name='stock_search'),
     path('login/', auth.show_login, name='show_login'),
     path('auth/', auth.do_login, name='do_login'),
     path('logout/', auth.do_logout, name='do_logout'),

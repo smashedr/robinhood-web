@@ -6,7 +6,7 @@ import requests
 import requests_cache
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from home.models import ShareData
 from Robinhood import Robinhood
@@ -18,7 +18,7 @@ requests_cache.install_cache('rh-requests', backend='sqlite', expire_after=120)
 
 @login_required
 @require_http_methods(["GET"])
-def v_home(request):
+def home_view(request):
     """
     View  /
     """

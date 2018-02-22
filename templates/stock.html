@@ -1,0 +1,95 @@
+{% extends "main.html" %}
+{% block stock_active %}active{% endblock %}
+{% block title %}Stock Search{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col text-center m-2">
+
+            <h1>Stock Search</h1>
+
+            <form method="post" action="{% url 'stock_search' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Stock Symbol" name="symbol" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="submit">Search</button>
+                    </span>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col text-center">
+
+            <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ stock.symbol }}"
+               class="btn btn btn-primary" target="_blank">Bulls</a>
+            <a href="http://caps.fool.com/Ticker/{{ stock.symbol }}.aspx"
+               class="btn btn btn-primary" target="_blank">Fool</a>
+            <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ stock.symbol }}"
+               class="btn btn btn-primary" target="_blank">CNN</a>
+            <a href="https://finance.yahoo.com/quote/{{ stock.symbol }}?p={{ stock.symbol }}"
+               class="btn btn btn-primary" target="_blank">Yahoo</a>
+            <a href="https://stockinvest.us/technical-analysis/{{ stock.symbol }}"
+               class="btn btn btn-primary" target="_blank">Stock Invest</a>
+            <a href="https://www.shortpainbot.com/?s={{ stock.symbol }}"
+               class="btn btn btn-primary" target="_blank">Short Pain</a>
+            <a href="https://stocktwits.com/symbol/{{ stock.symbol }}/"
+               class="btn btn btn-primary" target="_blank">Stock Twits</a>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mt-2">
+
+            {% if stock.tv.market %}
+                <!-- TradingView Widget BEGIN -->
+                <div class="tradingview-widget-container">
+                    <div id="tradingview_8abd7"></div>
+                    <div class="tradingview-widget-copyright">
+                        <a href="https://tradingview.com/symbols/{{ stock.tv.market }}-{{ stock.symbol }}/" rel="noopener" target="_blank">
+                                <span class="blue-text">
+                                    {{ stock.symbol }}
+                                </span>
+                        </a>
+                    </div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                    <script type="text/javascript">
+                        new TradingView.widget(
+                                {
+                                    "width": '100%',
+                                    "height": 680,
+                                    "symbol": "{{ stock.tv.market }}:{{ stock.symbol }}",
+                                    "interval": "15",
+                                    "timezone": "exchange",
+                                    "theme": "Dark",
+                                    "style": "1",
+                                    "locale": "en",
+                                    "toolbar_bg": "#f1f3f6",
+                                    "enable_publishing": false,
+                                    "allow_symbol_change": true,
+                                    "hideideas": true,
+                                    "studies": [
+                                        "RSI@tv-basicstudies",
+                                        "MACD@tv-basicstudies"
+                                    ],
+                                    "container_id": "tradingview_8abd7"
+                                }
+                        );
+                    </script>
+                </div>
+                <!-- TradingView Widget END -->
+            {% else %}
+                <p>Symbol not found on Trading View: {{ stock.tv.market }}:{{ stock.symbol }}</p>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

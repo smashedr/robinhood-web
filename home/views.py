@@ -5,8 +5,9 @@ import logging
 import requests
 import requests_cache
 from django.contrib import messages
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from home.models import ShareData
 from Robinhood import Robinhood
@@ -23,6 +24,9 @@ def home_view(request):
     View  /
     """
     try:
+        if 'pw_key' not in request.COOKIES:
+            logout(request)
+            redirect('show_login')
         _password = decode_pw(
             request.COOKIES['pw_key'].encode(),
             request.session['pw_hash'].encode(),

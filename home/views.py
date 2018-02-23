@@ -26,7 +26,7 @@ def home_view(request):
     try:
         if 'pw_key' not in request.COOKIES:
             logout(request)
-            redirect('show_login')
+            return redirect('show_login')
         _password = decode_pw(
             request.COOKIES['pw_key'].encode(),
             request.session['pw_hash'].encode(),

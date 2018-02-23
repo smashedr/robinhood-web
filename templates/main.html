@@ -44,12 +44,10 @@
                 <div class="float-left">
                     <a href="{% url 'home_view' %}" class="btn btn-info btn-sm" role="button">
                         Home
-                        <i class="fa fa-home" aria-hidden="true"></i>
-                    </a>
+                        <i class="fa fa-home" aria-hidden="true"></i></a>
                     <a href="https://share.robinhood.com/shaner195" class="btn btn-success btn-sm" role="button" target="_blank">
                         Get a Free Stock
-                        <i class="fas fa-dollar-sign"></i>
-                    </a>
+                        <i class="fas fa-dollar-sign"></i></a>
                     {% block stock_search %}
                         <div class="float-right">
                         <form method="post" action="{% url 'stock_search' %}">
@@ -68,13 +66,11 @@
                     {% if request.user.is_authenticated %}
                         <a href="" class="log-out btn btn-danger btn-sm" role="button" type="submit">
                             Log Out
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
+                            <i class="fas fa-sign-out-alt"></i></a>
                     {% else %}
                         <a href="{% url 'show_login' %}?next={{ request.path }}" class="btn btn-secondary btn-sm" role="button" type="submit">
                             Log In
-                            <i class="fas fa-sign-in-alt"></i>
-                        </a>
+                            <i class="fas fa-sign-in-alt"></i></a>
                     {% endif %}
                 </div>
             </div>

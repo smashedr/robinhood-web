@@ -18,7 +18,10 @@ def show_login(request):
     View  /login/
     """
     request.session['login_next_url'] = get_next_url(request)
-    return render(request, 'login.html')
+    if request.user.is_authenticated:
+        return redirect(request.session['login_next_url'])
+    else:
+        return render(request, 'login.html')
 
 
 @require_http_methods(['POST'])

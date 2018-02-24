@@ -6,6 +6,25 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger('app')
 
 
+def parse_cnn(symbol):
+    url = 'http://money.cnn.com/quote/forecast/forecast.html?symb={}'.format(
+        symbol
+    )
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content.decode(), 'html.parser')
+    img = soup.find_all('div', attrs={'id':'wsod_forecasts'})[0].img['src']
+    rec = soup.find(string="Analyst Recommendations")
+    strptxt = 'Move your mouse over pastmonths for detail'
+    recommend = rec.find_next('p').text.strip(strptxt)
+    signal = rec.find_next('p').find('span').text
+    cnn = {
+        'img_url': img,
+        'recommend': recommend,
+        'signal': signal,
+    }
+    return cnn
+
+
 def parse_si(symbol):
     url = 'https://stockinvest.us/technical-analysis/{}'.format(symbol)
     r = requests.get(url)
@@ -13,13 +32,10 @@ def parse_si(symbol):
     signal_since = soup.find_all('span', attrs={'class':'badge-lg'})[0]
     signal_txt = signal_since.text.replace('\n', '')
     signal_class = signal_since['class'][2].split('-')[1]
-
     info_table = soup.find_all('table', attrs={'class':'info-widget-table'})
     short = info_table[0].tr.text.split('\n')[2].split(' ( ')
-
     evalu = soup.find(string="Evaluation")
     eval_text = evalu.find_parent('div').find('p').text.replace('\n', '')
-
     si = {
         'signal_txt': signal_txt,
         'signal_class': signal_class,

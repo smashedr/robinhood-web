@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from rhweb.shared import parse_bulls, parse_si
+from rhweb.shared import parse_bulls, parse_si, parse_cnn
 import logging
 import requests
 
@@ -37,6 +37,7 @@ def stock_view(request, symbol=''):
             },
             'bulls': parse_bulls(symbol),
             'si': parse_si(symbol),
+            'cnn': parse_cnn(symbol),
         }
         return render(request, 'stock.html', {'stock': stock})
 

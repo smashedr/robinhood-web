@@ -19,7 +19,6 @@
 
 {% block body %}
 
-    {% get_saves request.user.username as saves %}
 
     <div class="row">
         <div class="col text-center">
@@ -34,20 +33,23 @@
             </div>
             <div class="float-right">
 
-                <div class="float-left mr-2">
-                    {% include 'include/save-dropdown.html' with saves=saves %}
-                </div>
-                <div class="float-right">
-                    {% if data.share_id in saves %}
-                        <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#delete-modal">
-                            Delete
-                        </button>
-                    {% else %}
-                        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#save-modal">
-                            Save
-                        </button>
-                    {% endif %}
-                </div>
+                {% if request.user.is_authenticated %}
+                    {% get_saves request.user.username as saves %}
+                    <div class="float-left mr-2">
+                        {% include 'include/save-dropdown.html' with saves=saves %}
+                    </div>
+                    <div class="float-right">
+                        {% if data.share_id in saves %}
+                            <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#delete-modal">
+                                Delete
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#save-modal">
+                                Save
+                            </button>
+                        {% endif %}
+                    </div>
+                {% endif %}
 
             </div>
         </div>

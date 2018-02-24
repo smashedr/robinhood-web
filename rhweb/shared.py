@@ -6,6 +6,38 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger('app')
 
 
+def parse_sp(symbol):
+    url = 'https://www.shortpainbot.com/?s={}'.format(symbol)
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content.decode(), 'html.parser')
+    main = soup.find_all('div', attrs={'class':'td-ss-main-content'})
+    script = main[0].canvas.find_next('script').text
+
+    sp = {
+        'script': script,
+    }
+    logger.info(sp)
+    return sp
+
+
+def parse_ss(symbol):
+    url = 'http://shortsqueeze.com/?symbol={}'.format(symbol)
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content.decode(), 'html.parser')
+    short = soup.find(string='Short Percent of Float')
+    short_per = short.find_next().text.strip('%').strip()
+    short = soup.find(string='Short % Increase / Decrease')
+    short_change = short.find_next().text.strip('%').strip()
+    short = soup.find(string='Short Interest (Shares Short)')
+    short_int = short.find_next().text.strip('%').strip()
+    ss = {
+        'short_per': short_per,
+        'short_change': short_change,
+        'short_int': short_int,
+    }
+    return ss
+
+
 def parse_cnn(symbol):
     url = 'http://money.cnn.com/quote/forecast/forecast.html?symb={}'.format(
         symbol
@@ -13,7 +45,7 @@ def parse_cnn(symbol):
     r = requests.get(url)
     soup = BeautifulSoup(r.content.decode(), 'html.parser')
     img = soup.find_all('div', attrs={'id':'wsod_forecasts'})[0].img['src']
-    rec = soup.find(string="Analyst Recommendations")
+    rec = soup.find(string='Analyst Recommendations')
     strptxt = 'Move your mouse over pastmonths for detail'
     recommend = rec.find_next('p').text.strip(strptxt)
     signal = rec.find_next('p').find('span').text
@@ -34,7 +66,7 @@ def parse_si(symbol):
     signal_class = signal_since['class'][2].split('-')[1]
     info_table = soup.find_all('table', attrs={'class':'info-widget-table'})
     short = info_table[0].tr.text.split('\n')[2].split(' ( ')
-    evalu = soup.find(string="Evaluation")
+    evalu = soup.find(string='Evaluation')
     eval_text = evalu.find_parent('div').find('p').text.replace('\n', '')
     si = {
         'signal_txt': signal_txt,

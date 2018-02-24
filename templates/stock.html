@@ -77,7 +77,7 @@
                 </div>
                 <div class="card-body">
                     <p>{{ stock.si.eval_text }}</p>
-                    <p>Shorts are <mark>{{ stock.si.short_percent }}</mark> as of {{ stock.si.short_date }}.</p>
+                    <p>Shorts are {{ stock.si.short_percent }} as of {{ stock.si.short_date }}.</p>
                 </div>
             </div>
         </div>
@@ -85,11 +85,28 @@
         <div class="col-lg-6 mt-2">
             <div class="card">
                 <div class="card-header bg-light ">
-                    CNN Signal: <strong>{{ stock.cnn.signal }}</strong>
+                    CNN Signal: <mark>{{ stock.cnn.signal }}</mark>
                 </div>
                 <div class="card-body">
                     <p>{{ stock.cnn.recommend }}</p>
                     <img class="img-fluid" src="{{ stock.cnn.img_url }}">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mt-2">
+            <div class="card">
+                <div class="card-header bg-light ">
+                    Short Squeeze: <mark>{{ stock.ss.short_per }}%</mark> with <strong>{{ stock.ss.short_int }}</strong> shares. Change: <strong>{{ stock.ss.short_change }}%</strong>
+                </div>
+                <div class="card-body">
+
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+                    <div id='short_pie'>
+                        <canvas id="doughnut-chart"></canvas>
+                    </div>
+                    <script>{{ stock.sp.script|safe }}</script>
+
                 </div>
             </div>
         </div>

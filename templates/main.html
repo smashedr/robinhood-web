@@ -28,8 +28,17 @@
 	<!-- Media -->
 	<link rel="icon" href="{% static 'images/favicon.ico' %}">
 
+    <!-- CSS -->
 	<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link href="{% static 'font-awesome/css/fontawesome-all.min.css' %}" rel="stylesheet">
+
+    <!-- JS -->
+    <script type="text/javascript" src="{% static 'bootstrap/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'clipboardjs/clipboard.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'font-awesome/js/fontawesome-all.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
 	{% block head %}{% endblock %}
 </head>
@@ -101,14 +110,6 @@
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
     </form>
 {% endif %}
-
-<!-- JS imported at end to improve page loads -->
-<script type="text/javascript" src="{% static 'bootstrap/jquery.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'bootstrap/popper.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'clipboardjs/clipboard.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'font-awesome/js/fontawesome-all.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/main.js' %}"></script>
 
 </body>
 </html>

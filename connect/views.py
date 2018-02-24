@@ -1,5 +1,5 @@
-from cryptography.fernet import Fernet
 import logging
+from rhweb.shared import gen_key, encode_pw, get_next_url
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
 from home.views import get_rh
+from home.models import SaveData
 
 logger = logging.getLogger('app')
 
@@ -42,11 +43,12 @@ def do_login(request):
         rh = get_rh(_username, _password)
         if rh:
             if login_user(request, _username):
-                key = Fernet.generate_key()
+                key = gen_key()
                 pw_hash = encode_pw(key, _password)
                 request.session['pw_hash'] = pw_hash.decode()
                 response = HttpResponseRedirect(get_next_url(request))
                 response.set_cookie('pw_key', key.decode())
+                SaveData.objects.get_or_create(save_owner=request.user.username)
                 return response
             else:
                 raise ValueError('Login failed.')
@@ -83,29 +85,3 @@ def login_user(request, username):
     except Exception as error:
         logger.exception(error)
         return False
-
-
-def get_next_url(request):
-    """
-    Determine 'next' Parameter
-    """
-    try:
-        next_url = request.GET['next']
-    except:
-        try:
-            next_url = request.POST['next']
-        except:
-            try:
-                next_url = request.session['login_next_url']
-            except:
-                next_url = '/'
-    if not next_url:
-        next_url = '/'
-    if '?next=' in next_url:
-        next_url = next_url.split('?next=')[1]
-    return next_url
-
-
-def encode_pw(key, clear):
-    cipher_suite = Fernet(key)
-    return cipher_suite.encrypt(clear.encode())

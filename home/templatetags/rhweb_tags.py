@@ -1,5 +1,7 @@
+import json
 import logging
 from django import template
+from home.models import SaveData
 
 logger = logging.getLogger('app')
 register = template.Library()
@@ -32,3 +34,11 @@ def my_multiply(value1, value2, decimal=2):
 def my_profit(price, last, shares, decimal=2):
     p = (float(last) * float(shares)) - (float(price) * float(shares))
     return round(p, decimal)
+
+
+@register.simple_tag(name='get_saves')
+def get_saves(value):
+    s = SaveData.objects.get(save_owner=value)
+    saved_shares = json.loads(s.saved_shares)
+    logger.info('saved_shares: {}'.format(saved_shares))
+    return saved_shares if saved_shares else None

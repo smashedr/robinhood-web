@@ -3,7 +3,7 @@ from django.templatetags.static import static
 from django.urls import path
 from django.views.generic.base import RedirectView
 
-import auth.views as auth
+import connect.views as connect
 import home.views as home
 import stock.views as stock
 
@@ -13,11 +13,12 @@ urlpatterns = [
     )),
     path('', home.home_view, name='home_view'),
     path('share/<str:share_id>', home.share_view, name='share_view'),
+    path('save/', home.save_share, name='save_share'),
     path('stock/', stock.home_view, name='stock_home'),
     path('stock/<str:symbol>/', stock.stock_view, name='stock_view'),
     path('search/', stock.stock_search, name='stock_search'),
-    path('login/', auth.show_login, name='show_login'),
-    path('auth/', auth.do_login, name='do_login'),
-    path('logout/', auth.do_logout, name='do_logout'),
+    path('login/', connect.show_login, name='show_login'),
+    path('auth/', connect.do_login, name='do_login'),
+    path('logout/', connect.do_logout, name='do_logout'),
     path('admin/', admin.site.urls, name='django_admin'),
 ]

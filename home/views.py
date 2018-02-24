@@ -1,15 +1,15 @@
-from cryptography.fernet import Fernet
 from datetime import datetime
 import json
 import logging
 import requests
 import requests_cache
+from rhweb.shared import decode_pw, get_next_url
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from home.models import ShareData
+from home.models import ShareData, SaveData
 from Robinhood import Robinhood
 
 logger = logging.getLogger('app')
@@ -71,6 +71,40 @@ def share_view(request, share_id):
     return render(request, 'share.html', {'data': data})
 
 
+@require_http_methods(["POST"])
+def save_share(request):
+    """
+    View  /save/
+    """
+    try:
+        save_name = request.POST.get('save-name')
+        share_id = request.POST.get('share-id')
+        logger.info('save_name: {}'.format(save_name))
+        logger.info('share_id: {}'.format(share_id))
+        if not save_name or not share_id:
+            raise ValueError('Invalid Save Name.')
+        s = SaveData.objects.get(save_owner=request.user.username)
+        s.saved_shares = '{}' if not s.saved_shares else s.saved_shares
+        saved_shares = json.loads(s.saved_shares)
+        saved_shares[share_id] = save_name
+        s.saved_shares = json.dumps(saved_shares)
+        s.save()
+        messages.add_message(
+            request, messages.SUCCESS,
+            'Successfully added {} to favorites.'.format(save_name),
+            extra_tags='success',
+        )
+        return redirect(get_next_url(request))
+    except Exception as error:
+        logger.exception(error)
+        messages.add_message(
+            request, messages.WARNING,
+            'Error saving: {}'.format(error),
+            extra_tags='danger',
+        )
+        return redirect(get_next_url(request))
+
+
 def get_securities(securities):
     """
     Loop through securities and create custom dictionary
@@ -110,8 +144,3 @@ def get_rh(username, _password):
             return rh
         else:
             return None
-
-
-def decode_pw(key, enc):
-    cipher_suite = Fernet(key)
-    return cipher_suite.decrypt(enc)

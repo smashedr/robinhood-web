@@ -64,7 +64,7 @@
                 </div>
                 <div class="float-right text-right">
                     {% if request.user.is_authenticated %}
-                        <a href="" class="log-out btn btn-danger btn-sm" role="button" type="submit">
+                        <a href="" class="btn btn-danger btn-sm" role="button" type="submit" id="logout-btn">
                             Log Out
                             <i class="fas fa-sign-out-alt"></i></a>
                     {% else %}
@@ -96,7 +96,7 @@
 </div>
 
 {% if request.user.is_authenticated %}
-    <form id="log-out" action="{% url 'do_logout' %}" method="POST">
+    <form id="logout-form" action="{% url 'do_logout' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
     </form>

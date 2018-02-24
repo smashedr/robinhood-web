@@ -1,12 +1,15 @@
 {% extends "main.html" %}
 {% block home_active %}active{% endblock %}
 {% block title %}Home{% endblock %}
+{% load rhweb_tags %}
 
 {% block head %}
 	<!-- Place page specific head code here -->
 {% endblock %}
 
 {% block body %}
+
+    {% get_saves request.user.username as saves %}
 
     <div class="row">
         <div class="col text-center">
@@ -17,15 +20,17 @@
     <div class="row">
         <div class="col">
             <div class="float-left">
-                Hello <strong>{{ request.user.username|truncatechars:8 }}</strong>
-            </div>
-            <div class="float-right">
                 Share: <a target="_blank"
-                    href="https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}">
-                    https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}</a>
+                          href="https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}">
+                https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}</a>
 
                 <a href="#" class="copy-data" data-clipboard-text="https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}">
                     <i class="fa fa-link" aria-hidden="true"></i></a>
+            </div>
+            <div class="float-right">
+
+                {% include 'include/save-dropdown.html' with saves=saves %}
+
             </div>
         </div>
     </div>

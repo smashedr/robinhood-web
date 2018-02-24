@@ -11,4 +11,14 @@ class ShareData(models.Model):
         'Share ID', max_length=255, default='reserved_fore_future_use'
     )
     generated_at = models.DateTimeField('Data Generated Date', default=now)
-    securities = models.TextField('Securities JSON', default='')
+    securities = models.TextField('Securities JSON', default='{}')
+
+
+class SaveData(models.Model):
+    save_owner = models.CharField(
+        'Save Owner', max_length=50, primary_key=True
+    )
+    save_id = models.CharField(
+        'Save ID', max_length=255, default='reserved_fore_future_use'
+    )
+    saved_shares = models.TextField('Saved Shares JSON', default='{}')

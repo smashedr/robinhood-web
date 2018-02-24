@@ -1,0 +1,13 @@
+
+{% if saves %}
+    <form>
+        <div class="form-group">
+            <select class="custom-select custom-select-sm" id="shared-saves">
+                <option value="">Go To Saved Share</option>
+                {% for item, value in saves.items %}
+                    <option value="{{ item }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+{% endif %}

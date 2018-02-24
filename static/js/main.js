@@ -8,8 +8,26 @@ $(document).ready(function() {
     });
 
     // Log Out Form Activator Button
-    $('.log-out').click(function () {
-        $('#log-out').submit();
+    $('#logout-btn').click(function () {
+        $('#logout-form').submit();
+        return false;
+    });
+
+    // Log Out Form Activator Button
+    $('#save-btn').click(function () {
+        console.log('clicked save button');
+        $('#save-form').submit();
+        $('#save-modal').modal('hide');
+        return false;
+    });
+    $('#save-modal').on('shown.bs.modal', function () {
+        $('#save-name').focus()
+    });
+    $('#shared-saves').bind('change', function () { // bind change event to select
+        var share = $(this).val(); // get selected value
+        if (share != '') { // require a URL
+            window.location = '/share/' + share; // redirect
+        }
         return false;
     });
 

@@ -57,6 +57,33 @@
         </div>
     </div>
 
+    <div class="row mt-2">
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-light ">
+                    AmericanBulls Signal: {{ stock.bulls.last_signal|safe }}
+                </div>
+                <div class="card-body">
+                    <p>{{ stock.bulls.summary|safe }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header bg-light ">
+                    StockInvest Signal: <span class="text-{{ stock.si.signal_class }}"><strong>{{ stock.si.signal_txt }}</strong></span>
+                </div>
+                <div class="card-body">
+                    <p>{{ stock.si.eval_text }}</p>
+                    <p>Shorts are <mark>{{ stock.si.short_percent }}</mark> as of {{ stock.si.short_date }}.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <div class="row">
         <div class="col mt-2">
 

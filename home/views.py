@@ -79,8 +79,6 @@ def save_share(request):
     try:
         save_name = request.POST.get('save-name')
         share_id = request.POST.get('share-id')
-        logger.info('save_name: {}'.format(save_name))
-        logger.info('share_id: {}'.format(share_id))
         if not save_name or not share_id:
             raise ValueError('Invalid Save Name.')
         s = SaveData.objects.get(save_owner=request.user.username)

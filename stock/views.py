@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
+from rhweb.shared import parse_bulls, parse_si
 import logging
 import requests
 
@@ -14,7 +15,6 @@ def home_view(request):
     """
     View: /stock/
     """
-    logger.info('stock_view')
     return redirect('/stock/AMZN')
 
 
@@ -23,8 +23,6 @@ def stock_view(request, symbol=''):
     """
     View: /stock/<symbol>/
     """
-    logger.info('stock_view')
-    logger.info('symbol: {}'.format(symbol))
     if not symbol:
         message = 'Error parsing stock symbol. Try again...'
         messages.add_message(
@@ -35,10 +33,11 @@ def stock_view(request, symbol=''):
         stock = {
             'symbol': symbol,
             'tv': {
-                'market': get_trading_view_market(symbol)
+                'market': get_trading_view_market(symbol),
             },
+            'bulls': parse_bulls(symbol),
+            'si': parse_si(symbol),
         }
-        logger.info(stock)
         return render(request, 'stock.html', {'stock': stock})
 
 
@@ -47,9 +46,7 @@ def stock_search(request):
     """
     View: /stock/search/
     """
-    logger.info('do_search')
     symbol = request.POST.get('symbol').upper()
-    logger.info('symbol: {}'.format(symbol))
     if not symbol:
         symbol = 'AMZN'
     return redirect('/stock/{}'.format(symbol))

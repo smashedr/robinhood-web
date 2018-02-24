@@ -16,7 +16,6 @@ def parse_sp(symbol):
     sp = {
         'script': script,
     }
-    logger.info(sp)
     return sp
 
 

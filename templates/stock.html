@@ -24,7 +24,7 @@
             <form method="post" action="{% url 'stock_search' %}">
                 {% csrf_token %}
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Stock Symbol" name="symbol" required>
+                    <input type="text" class="form-control" placeholder="{{ stock.symbol }}" name="symbol" required>
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" type="submit">Search</button>
                     </span>

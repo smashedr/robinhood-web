@@ -30,6 +30,7 @@ def stock_view(request, symbol=''):
         )
         return render(request, 'stock.html')
     else:
+        symbol = symbol.upper()
         stock = {
             'symbol': symbol,
             'tv': {

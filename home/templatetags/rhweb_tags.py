@@ -24,6 +24,16 @@ def round_it(value, decimal=2):
     return round(float(value), decimal)
 
 
+@register.filter(name='get_last')
+def get_last(value, decimal=2):
+    if 'last_extended_hours_trade_price' in value:
+        if value['last_extended_hours_trade_price']:
+            return round(
+                float(value['last_extended_hours_trade_price']), decimal
+            )
+    return round(float(value['last_trade_price']), decimal)
+
+
 @register.simple_tag(name='my_multiply')
 def my_multiply(value1, value2, decimal=2):
     m = float(value1) * float(value2)

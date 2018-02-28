@@ -3,7 +3,7 @@
 <div class="row">
     {% for security in data.securities %}
         {% if security.security %}
-            {% with price=security.average_buy_price|round_it shares=security.quantity|round_it:0 last=security.quote.last_trade_price|round_it %}
+            {% with price=security.average_buy_price|round_it shares=security.quantity|round_it:0 last=security.quote|get_last %}
 
             <div class="col-lg-4">
                 <div class="card mt-2 mb-2 {{ security|card_class }}">

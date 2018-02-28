@@ -58,11 +58,11 @@ def stock_search(request):
 
 def get_trading_view_market(symbol):
     url = 'https://www.tradingview.com/symbols/NYSE-{}/'.format(symbol)
-    r = requests.head(url)
+    r = requests.head(url, timeout=3)
     if r.status_code == 200:
         return 'NYSE'
     url = 'https://www.tradingview.com/symbols/NASDAQ-{}/'.format(symbol)
-    r = requests.head(url)
+    r = requests.head(url, timeout=3)
     if r.status_code == 200:
         return 'NASDAQ'
     return None

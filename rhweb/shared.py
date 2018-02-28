@@ -9,7 +9,7 @@ logger = logging.getLogger('app')
 def parse_sp(symbol):
     try:
         url = 'https://www.shortpainbot.com/?s={}'.format(symbol)
-        r = requests.get(url)
+        r = requests.get(url, timeout=3)
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         main = soup.find_all('div', attrs={'class':'td-ss-main-content'})
         script = main[0].canvas.find_next('script').text
@@ -26,7 +26,7 @@ def parse_sp(symbol):
 def parse_ss(symbol):
     try:
         url = 'http://shortsqueeze.com/?symbol={}'.format(symbol)
-        r = requests.get(url)
+        r = requests.get(url, timeout=3)
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         short = soup.find(string='Short Percent of Float')
         short_per = short.find_next().text.strip('%').strip()
@@ -50,7 +50,7 @@ def parse_cnn(symbol):
         url = 'http://money.cnn.com/quote/forecast/forecast.html?symb={}'.format(
             symbol
         )
-        r = requests.get(url)
+        r = requests.get(url, timeout=3)
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         img = soup.find_all('div', attrs={'id':'wsod_forecasts'})[0].img['src']
         rec = soup.find(string='Analyst Recommendations')
@@ -71,7 +71,7 @@ def parse_cnn(symbol):
 def parse_si(symbol):
     try:
         url = 'https://stockinvest.us/technical-analysis/{}'.format(symbol)
-        r = requests.get(url)
+        r = requests.get(url, timeout=3)
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         signal_since = soup.find_all('span', attrs={'class':'badge-lg'})[0]
         signal_txt = signal_since.text.replace('\n', '')
@@ -97,7 +97,7 @@ def parse_bulls(symbol):
     try:
         url = ('https://www.americanbulls.com/SignalPage.aspx'
                '?lang=en&Ticker={}').format(symbol)
-        r = requests.get(url)
+        r = requests.get(url, timeout=3)
         soup = BeautifulSoup(r.content.decode(), 'html.parser')
         last_signal = soup.body.find(
             'span', attrs={'id':'MainContent_LastSignal'}

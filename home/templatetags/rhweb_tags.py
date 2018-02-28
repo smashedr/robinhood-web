@@ -30,15 +30,27 @@ def my_multiply(value1, value2, decimal=2):
     return round(m, decimal)
 
 
-@register.simple_tag(name='my_profit')
-def my_profit(price, last, shares, decimal=2):
+@register.simple_tag(name='profit_total')
+def profit_total(price, last, shares, decimal=2):
     p = (float(last) * float(shares)) - (float(price) * float(shares))
     return round(p, decimal)
+
+
+@register.simple_tag(name='profit_percent')
+def profit_percent(price, last, shares, decimal=2):
+    cost = (float(price) * float(shares))
+    profit = (float(last) * float(shares)) - cost
+    if profit > 0:
+        percent = round(profit/cost*100, 2)
+    elif profit < 0:
+        percent = round(-profit/cost*100, 2)
+    else:
+        percent = 0
+    return round(percent, decimal)
 
 
 @register.simple_tag(name='get_saves')
 def get_saves(value):
     s = SaveData.objects.get(save_owner=value)
     saved_shares = json.loads(s.saved_shares)
-    logger.info('saved_shares: {}'.format(saved_shares))
     return saved_shares if saved_shares else None

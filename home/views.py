@@ -121,7 +121,7 @@ def get_rh_open(instrument):
     """
     Query an open Robinhood endpoint for json data
     """
-    r = requests.get(instrument)
+    r = requests.get(instrument, timeout=3)
     if r.status_code == 200:
         return r.json()
     else:

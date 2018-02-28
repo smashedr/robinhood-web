@@ -75,6 +75,8 @@ def profit_total(price, last, shares, decimal=2):
 @register.simple_tag(name='profit_percent')
 def profit_percent(price, last, shares, decimal=2):
     cost = (float(price) * float(shares))
+    if int(cost) == 0:
+        return 0
     profit = (float(last) * float(shares)) - cost
     if profit > 0:
         percent = round(profit/cost*100, 2)

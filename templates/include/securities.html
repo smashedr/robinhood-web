@@ -10,7 +10,7 @@
                     <div class="card-header p-2">
                         <div class="float-left">
                             <a id="{{ security.security.symbol }}"></a>{{ shares }} -
-                            <strong>{{ security.security.symbol }} </strong>
+                            <strong><a href="{% url 'stock_view' symbol=security.security.symbol %}" target="_blank">{{ security.security.symbol }}</a></strong>
                             <a href="{% url 'stock_view' symbol=security.security.symbol %}" target="_blank" class="ml-2">
                                 <i class="fas fa-chart-bar"></i></a>
                             <a href="#" class="copy-data ml-1" data-clipboard-text="https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}#{{ security.security.symbol }}">
@@ -22,10 +22,11 @@
                     </div>
                     <div class="card-body p-2">
                         <h5 class="card-title float-left">
+                            <a href="{% url 'stock_view' symbol=security.security.symbol %}" target="_blank">
                             {% if security.security.simple_name == None %}
-                                {{ security.security.name|truncatechars:20 }}
+                                {{ security.security.name|truncatechars:20 }}</a>
                             {% else %}
-                                {{ security.security.simple_name }}
+                                {{ security.security.simple_name }}</a>
                             {% endif %}
                         </h5>
                         <h5 class="card-title text-right">${{ last }}</h5>

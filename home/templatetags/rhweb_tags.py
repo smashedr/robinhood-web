@@ -7,14 +7,17 @@ logger = logging.getLogger('app')
 register = template.Library()
 
 
-@register.filter(name='card_class')
-def card_class(security):
-    ltp = float(security['quote']['last_trade_price'])
-    abp = float(security['average_buy_price'])
-    if ltp >= abp:
-        return 'text-white bg-success'
-    else:
-        return 'text-white bg-danger'
+@register.filter(name='parse_security')
+def parse_security(security):
+    s = {
+        'symbol': security['security']['symbol'],
+        'price': security['average_buy_price'],
+        'shares': security['quantity'],
+        'last': get_last(security['quote']),
+        'class': card_class(security),
+        'daily': parse_daily(security),
+    }
+    return s
 
 
 @register.filter(name='round_it')
@@ -22,42 +25,6 @@ def round_it(value, decimal=2):
     if decimal == 0:
         return int(float(value))
     return round(float(value), decimal)
-
-
-@register.filter(name='get_last')
-def get_last(value, decimal=2):
-    if value['last_extended_hours_trade_price']:
-        return round(
-            float(value['last_extended_hours_trade_price']), decimal
-        )
-    return round(float(value['last_trade_price']), decimal)
-
-
-@register.filter(name='parse_daily')
-def parse_daily(security):
-    close = float(security['quote']['previous_close'])
-    last = None
-    if 'last_extended_hours_trade_price' in security['security']:
-        if security['quote']['last_extended_hours_trade_price']:
-            last = float(security['quote']['last_extended_hours_trade_price'])
-    if not last:
-        last = float(security['quote']['last_trade_price'])
-    if last >= close:
-        bs_class = 'bg-success'
-        text = 'Bullish run.'
-    else:
-        bs_class = 'bg-danger'
-        text = 'Bearish downtrend.'
-
-    dollar = profit_total(close, last, security['quantity'])
-    percent = profit_percent(close, last, security['quantity'])
-    daily = {
-        'class': 'text-white {}'.format(bs_class),
-        'total': dollar,
-        'percent': percent,
-        'text': text,
-    }
-    return daily
 
 
 @register.simple_tag(name='my_multiply')
@@ -92,3 +59,47 @@ def get_saves(value):
     s = SaveData.objects.get(save_owner=value)
     saved_shares = json.loads(s.saved_shares)
     return saved_shares if saved_shares else None
+
+
+def get_last(value, decimal=2):
+    if 'last_extended_hours_trade_price' in value:
+        if value['last_extended_hours_trade_price']:
+            return round(
+                float(value['last_extended_hours_trade_price']), decimal
+            )
+    return round(float(value['last_trade_price']), decimal)
+
+
+def card_class(security):
+    ltp = float(security['quote']['last_trade_price'])
+    abp = float(security['average_buy_price'])
+    if ltp >= abp:
+        return 'text-white bg-success'
+    else:
+        return 'text-white bg-danger'
+
+
+def parse_daily(security):
+    close = float(security['quote']['previous_close'])
+    last = None
+    if 'last_extended_hours_trade_price' in security['security']:
+        if security['quote']['last_extended_hours_trade_price']:
+            last = float(security['quote']['last_extended_hours_trade_price'])
+    if not last:
+        last = float(security['quote']['last_trade_price'])
+    if last >= close:
+        bs_class = 'bg-success'
+        text = 'Bullish run.'
+    else:
+        bs_class = 'bg-danger'
+        text = 'Bearish downtrend.'
+
+    dollar = profit_total(close, last, security['quantity'])
+    percent = profit_percent(close, last, security['quantity'])
+    daily = {
+        'class': 'text-white {}'.format(bs_class),
+        'total': dollar,
+        'percent': percent,
+        'text': text,
+    }
+    return daily

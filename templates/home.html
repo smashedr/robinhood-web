@@ -35,6 +35,8 @@
         </div>
     </div>
 
-    {% include 'include/securities.html' with securities=data.securities %}
+    <div class="row">
+        {% include 'include/securities.html' with securities=data.securities div_class='col-lg-4' %}
+    </div>
 
 {% endblock %}

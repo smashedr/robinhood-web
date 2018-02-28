@@ -1,60 +1,61 @@
 {% load rhweb_tags %}
 
-<div class="row">
-    {% for security in data.securities %}
+{% for security in data.securities %}
+    <div class="{{ div_class }}">
         {% if security.security %}
-            {% with price=security.average_buy_price|round_it shares=security.quantity|round_it:0 last=security.quote|get_last %}
+            {% with s=security|parse_security %}
 
-            <div class="col-lg-4">
-                <div class="card mt-2 mb-2 {{ security|card_class }}">
+                <div class="card mt-2 mb-2 {{ s.class }}">
                     <div class="card-header p-2">
                         <div class="float-left">
-                            <a id="{{ security.security.symbol }}"></a>{{ shares }} -
-                            <strong><a href="{% url 'stock_view' symbol=security.security.symbol %}" target="_blank">{{ security.security.symbol }}</a></strong>
-                            <a href="{% url 'stock_view' symbol=security.security.symbol %}" target="_blank" class="ml-2">
+                            <a id="{{ s.symbol }}"></a>{{ s.shares|round_it:0 }} -
+                            <strong><a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
+                                {{ s.symbol }}</a></strong>
+                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank" class="ml-2">
                                 <i class="fas fa-chart-bar"></i></a>
-                            <a href="#" class="copy-data ml-1" data-clipboard-text="https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}#{{ security.security.symbol }}">
+                            <a href="#" class="copy-data ml-1"
+                              data-clipboard-text="https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}#{{ s.symbol }}">
                                 <i class="fa fa-link" aria-hidden="true"></i></a>
                         </div>
                         <div class="text-right">
-                            <strong>${% profit_total price last shares %} ({% profit_percent price last shares %}%)</strong>
+                            <strong>${% profit_total s.price s.last s.shares %} ({% profit_percent s.price s.last s.shares %}%)</strong>
                         </div>
                     </div>
                     <div class="card-body p-2">
                         <h5 class="card-title float-left">
-                            <a href="{% url 'stock_view' symbol=security.security.symbol %}" target="_blank">
+                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
                             {% if security.security.simple_name == None %}
                                 {{ security.security.name|truncatechars:20 }}</a>
                             {% else %}
-                                {{ security.security.simple_name }}</a>
+                                {{ security.security.simple_name|truncatechars:20 }}</a>
                             {% endif %}
                         </h5>
-                        <h5 class="card-title text-right">${{ last }}</h5>
+                        <h5 class="card-title text-right">${{ s.last }}</h5>
 
                         <table class="table table-sm">
                             <tr>
                                 <td>Cost:</td>
-                                <td>${{ price }} x {{ shares }}</td>
-                                <td>${% my_multiply price shares %}</td>
+                                <td>${{ s.price }} x {{ s.shares|round_it:0 }}</td>
+                                <td>${% my_multiply s.price s.shares %}</td>
                             </tr>
                             <tr>
                                 <td>Equity: </td>
-                                <td>${{ last }} x {{ shares }}</td>
-                                <td><strong>${% my_multiply last shares %}</strong></td>
+                                <td>${{ s.last }} x {{ s.shares }}</td>
+                                <td><strong>${% my_multiply s.last s.shares %}</strong></td>
                             </tr>
                         </table>
                         <div>
-                            <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ security.security.symbol }}"
+                            <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ s.symbol }}"
                                class="btn btn-sm btn-primary" target="_blank">Bulls</a>
-                            <a href="https://stockinvest.us/technical-analysis/{{ security.security.symbol }}"
+                            <a href="https://stockinvest.us/technical-analysis/{{ s.symbol }}"
                                class="btn btn-sm btn-primary" target="_blank">SI</a>
                             <a href="http://shortsqueeze.com/?symbol={{ stock.symbol }}"
                                class="btn btn-sm btn-primary" target="_blank">SS</a>
-                            <a href="http://caps.fool.com/Ticker/{{ security.security.symbol }}.aspx"
+                            <a href="http://caps.fool.com/Ticker/{{ s.symbol }}.aspx"
                                class="btn btn-sm btn-primary" target="_blank">Fool</a>
-                            <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ security.security.symbol }}"
+                            <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ s.symbol }}"
                                class="btn btn-sm btn-primary" target="_blank">CNN</a>
-                            <a href="https://stocktwits.com/symbol/{{ security.security.symbol }}/"
+                            <a href="https://stocktwits.com/symbol/{{ s.symbol }}/"
                                class="btn btn-sm btn-primary" target="_blank">ST</a>
                         </div>
                         <div>
@@ -75,20 +76,16 @@
                         </div>
                     </div>
 
-                {% with daily=security|parse_daily  %}
-                    <div class="card-footer {{ daily.class }}">
+                    <div class="card-footer {{ s.daily.class }}">
                         <div class="float-left">
-                            {{ daily.text }}
+                            {{ s.daily.text }}
                         </div>
                         <div class="float-right">
-                            <strong>${{ daily.total }} ({{ daily.percent }}%)</strong>
+                            <strong>${{ s.daily.total }} ({{ s.daily.percent }}%)</strong>
                         </div>
                     </div>
-                {% endwith %}
-
 
                 </div>
-            </div>
 
             {% endwith %}
         {% else %}
@@ -96,5 +93,5 @@
             <p>Security not found for instrument: {{ security.instrument }}</p>
 
         {% endif %}
-    {% endfor %}
-</div>
+    </div>
+{% endfor %}

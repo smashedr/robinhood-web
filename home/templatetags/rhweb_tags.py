@@ -82,7 +82,7 @@ def card_class(security):
 def parse_daily(security):
     close = float(security['quote']['previous_close'])
     last = None
-    if 'last_extended_hours_trade_price' in security['security']:
+    if 'last_extended_hours_trade_price' in security['quote']:
         if security['quote']['last_extended_hours_trade_price']:
             last = float(security['quote']['last_extended_hours_trade_price'])
     if not last:

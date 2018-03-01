@@ -3,7 +3,14 @@
 {% block stock_active %}active{% endblock %}
 {% block title %}Stock Search{% endblock %}
 
-{% block og_tags %}{% endblock %}
+{% block og_tags %}
+    <meta property="og:title" content="Meta Stock Search">
+    <meta property="og:description" content="Get graphs and links on any publicly traded stock.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://{{ request.META.HTTP_HOST }}{{ request.path }}">
+    <meta property="og:image" content="https://{{ request.META.HTTP_HOST }}{% static 'images/graph.jpg' %}">
+    <meta property="og:image:type" content="image/png">
+{% endblock %}
 
 {% block head %}{% endblock %}
 

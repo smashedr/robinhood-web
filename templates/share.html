@@ -53,7 +53,9 @@
         </div>
     </div>
 
-    {% include 'include/securities.html' with securities=data.securities %}
+    <div class="row">
+        {% include 'include/securities.html' with securities=data.securities div_class='col-lg-4' %}
+    </div>
 
     <!-- Modals -->
     <div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="save-modal" aria-hidden="true">

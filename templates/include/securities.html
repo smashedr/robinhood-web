@@ -40,7 +40,7 @@
                             </tr>
                             <tr>
                                 <td>Equity: </td>
-                                <td>${{ s.last }} x {{ s.shares }}</td>
+                                <td>${{ s.last }} x {{ s.shares|round_it:0 }}</td>
                                 <td><strong>${% my_multiply s.last s.shares %}</strong></td>
                             </tr>
                         </table>

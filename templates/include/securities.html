@@ -18,7 +18,7 @@
                                 <i class="fa fa-link" aria-hidden="true"></i></a>
                         </div>
                         <div class="text-right">
-                            <strong>${% profit_total s.price s.last s.shares %} ({% profit_percent s.price s.last s.shares %}%)</strong>
+                            ${% profit_total s.price s.last s.shares %} (<strong>{% profit_percent s.price s.last s.shares %}%</strong>)
                         </div>
                     </div>
                     <div class="card-body p-2">
@@ -35,7 +35,7 @@
                         <table class="table table-sm">
                             <tr>
                                 <td>Cost:</td>
-                                <td>${{ s.price }} x {{ s.shares|round_it:0 }}</td>
+                                <td>${{ s.price|round_it:2 }} x {{ s.shares|round_it:0 }}</td>
                                 <td>${% my_multiply s.price s.shares %}</td>
                             </tr>
                             <tr>
@@ -81,7 +81,7 @@
                             {{ s.daily.text }}
                         </div>
                         <div class="float-right">
-                            <strong>${{ s.daily.total }} ({{ s.daily.percent }}%)</strong>
+                            ${{ s.daily.total }} (<strong>{{ s.daily.percent }}%</strong>)
                         </div>
                     </div>
 

@@ -61,19 +61,10 @@ def get_saves(value):
     return saved_shares if saved_shares else None
 
 
-def get_last(value, decimal=2):
-    if 'last_extended_hours_trade_price' in value:
-        if value['last_extended_hours_trade_price']:
-            return round(
-                float(value['last_extended_hours_trade_price']), decimal
-            )
-    return round(float(value['last_trade_price']), decimal)
-
-
 def card_class(security):
-    ltp = float(security['quote']['last_trade_price'])
-    abp = float(security['average_buy_price'])
-    if ltp >= abp:
+    last = get_last(security['quote'])
+    buy = float(security['average_buy_price'])
+    if last >= buy:
         return 'text-white bg-success'
     else:
         return 'text-white bg-danger'
@@ -81,12 +72,7 @@ def card_class(security):
 
 def parse_daily(security):
     close = float(security['quote']['previous_close'])
-    last = None
-    if 'last_extended_hours_trade_price' in security['quote']:
-        if security['quote']['last_extended_hours_trade_price']:
-            last = float(security['quote']['last_extended_hours_trade_price'])
-    if not last:
-        last = float(security['quote']['last_trade_price'])
+    last = get_last(security['quote'])
     if last >= close:
         bs_class = 'bg-success'
         text = 'Bullish run.'
@@ -103,3 +89,12 @@ def parse_daily(security):
         'text': text,
     }
     return daily
+
+
+def get_last(value, decimal=2):
+    if 'last_extended_hours_trade_price' in value:
+        if value['last_extended_hours_trade_price']:
+            return round(
+                float(value['last_extended_hours_trade_price']), decimal
+            )
+    return round(float(value['last_trade_price']), decimal)

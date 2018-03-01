@@ -1,0 +1,30 @@
+{% extends "main.html" %}
+{% load staticfiles %}
+{% block stock_active %}active{% endblock %}
+{% block title %}Stock Search{% endblock %}
+
+{% block og_tags %}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col text-center m-2">
+
+            <h1>{{ stock.symbol }}</h1>
+
+            <form method="post" action="{% url 'stock_search' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Stock Symbol. Example: AAPL" name="symbol" required>
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="submit">Search</button>
+                    </span>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}

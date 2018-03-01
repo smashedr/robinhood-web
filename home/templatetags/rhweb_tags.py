@@ -75,10 +75,10 @@ def parse_daily(security):
     last = get_last(security['quote'])
     if last >= close:
         bs_class = 'bg-success'
-        text = 'Bullish run.'
+        text = 'Up Today.'
     else:
         bs_class = 'bg-danger'
-        text = 'Bearish downtrend.'
+        text = 'Down Today.'
 
     dollar = profit_total(close, last, security['quantity'])
     percent = profit_percent(close, last, security['quantity'])

@@ -3,9 +3,7 @@
 {% block login_active %}active{% endblock %}
 {% block title %}Login{% endblock %}
 
-{% block head %}
-    <!-- Place page specific head code here -->
-{% endblock %}
+{% block head %}{% endblock %}
 
 {% block body %}
 
@@ -15,21 +13,21 @@
             <form class="submit-once" method="POST" name="login" id="login" action="{% url 'do_login' %}">
                 {% csrf_token %}
 
-                <label for="key" class="">Robinhood Username:</label>
-                <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+                <div class="form-group mt-3">
+                    <label for="username">Robinhood Username:</label>
+                    <input type="text" class="form-control" id="username" name="username"placeholder="Username">
+                </div>
 
-                <p></p>
-
-                <label for="password" class="">Robinhood Password:</label>
-                <input type="password" name="password" class="form-control" placeholder="Password" required>
+                <div class="form-group">
+                    <label for="password">Robinhood Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
 
                 {% if request.GET.next %}
                     <input type="hidden" name="next" value="{{ request.GET.next }}">
                 {% elif request.session.login_next_url %}
                     <input type="hidden" name="next" value="{{ request.session.login_next_url }}">
                 {% endif %}
-
-                <p></p>
 
                 <div class="text-center">
                     <button id="login-button" class="btn btn-info center-block" type="submit">
@@ -40,7 +38,6 @@
 
                 <div id="login-message">
                     {% if messages %}
-                        <p></p>
                         <ul class="list-group text-center">
                             {% for message in messages %}
                                 <li class="list-group-item list-group-item-{{ message.extra_tags }}">{{ message }}</li>
@@ -49,15 +46,11 @@
                     {% endif %}
                 </div>
 
-                <p></p>
-
                 <div class="text-center">
                     <a href="#" data-toggle="modal" data-target="#password-modal">
                         Need Additional Assistance?
                         <i class="fas fa-info-circle"></i></a>
                 </div>
-
-                <p></p>
 
             </form>
         </div>

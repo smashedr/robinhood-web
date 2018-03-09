@@ -110,6 +110,9 @@ def get_securities(securities):
     Loop through securities and create custom dictionary
     """
     for s in securities:
+        logger.info(type(s['quantity']))
+        if s['quantity'] == '0.0000':
+            s['watchlist'] = True
         rhs = get_rh_open(s['instrument'])
         s['security'] = rhs
         q = get_rh_open(s['security']['quote'])

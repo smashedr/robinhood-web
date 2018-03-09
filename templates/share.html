@@ -13,7 +13,12 @@
     <meta property="og:image:type" content="image/jpg">
 {% endblock %}
 
-{% block head %}{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'datatables/datatables.min.css' %}">
+    <script type="text/javascript" src="{% static 'datatables/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/stocks.js' %}"></script>
+{% endblock %}
 
 {% block body %}
 
@@ -54,7 +59,7 @@
     </div>
 
     <div class="row">
-        {% include 'include/securities.html' with securities=data.securities div_class='col-lg-4' %}
+        {% include 'include/securities-table.html' with securities=data.securities div_class='col-lg-4' %}
     </div>
 
     <!-- Modals -->

@@ -20,9 +20,11 @@ $(document).ready(function() {
         $('#save-modal').modal('hide');
         return false;
     });
+
     $('#save-modal').on('shown.bs.modal', function () {
         $('#save-name').focus()
     });
+
     $('#shared-saves').bind('change', function () { // bind change event to select
         var share = $(this).val(); // get selected value
         if (share != '') { // require a URL

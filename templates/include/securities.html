@@ -1,97 +1,68 @@
 {% load rhweb_tags %}
 
-{% for security in data.securities %}
-    <div class="{{ div_class }}">
-        {% if security.security %}
-            {% with s=security|parse_security %}
+<div class="col">
 
-                <div class="card mt-2 mb-2 {{ s.class }}">
-                    <div class="card-header p-2">
-                        <div class="float-left">
-                            <a id="{{ s.symbol }}"></a>{{ s.shares|round_it:0 }} -
-                            <strong><a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
-                                {{ s.symbol }}</a></strong>
-                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank" class="ml-2">
-                                <i class="fas fa-chart-bar"></i></a>
-                            <a href="#" class="copy-data ml-1"
-                              data-clipboard-text="https://{{ request.META.HTTP_HOST }}{% url 'share_view' share_id=data.share_id %}#{{ s.symbol }}">
-                                <i class="fa fa-link" aria-hidden="true"></i></a>
-                        </div>
-                        <div class="text-right">
-                            ${% profit_total s.price s.last s.shares %} (<strong>{% profit_percent s.price s.last s.shares %}%</strong>)
-                        </div>
-                    </div>
-                    <div class="card-body p-2">
-                        <h5 class="card-title float-left">
-                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
+    <table id="stock-table" class="table table-striped table-bordered" width="100%" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Symbol</th>
+            <th>Shares</th>
+            <th>Total Return</th>
+            <th>Total Percent</th>
+            <th>Equity</th>
+            <th>Today Percent</th>
+            <th>Today Return</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for security in data.securities %}
+            {% if security.security %}
+                {% with s=security|parse_security %}
+
+                    <tr>
+                        <td>
                             {% if security.security.simple_name == None %}
-                                {{ security.security.name|truncatechars:20 }}</a>
+                                {{ security.security.name|truncatechars:28 }}
                             {% else %}
-                                {{ security.security.simple_name|truncatechars:20 }}</a>
+                                {{ security.security.simple_name|truncatechars:28 }}
                             {% endif %}
-                        </h5>
-                        <h5 class="card-title text-right">${{ s.last }}</h5>
+                        </td>
+                        <td>
+                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
+                                {{ s.symbol }}
+                            </a>
+                        </td>
 
-                        <table class="table table-sm">
-                            <tr>
-                                <td>Cost:</td>
-                                <td>${{ s.price|round_it:2 }} x {{ s.shares|round_it:0 }}</td>
-                                <td>${% my_multiply s.price s.shares %}</td>
-                            </tr>
-                            <tr>
-                                <td>Equity: </td>
-                                <td>${{ s.last }} x {{ s.shares|round_it:0 }}</td>
-                                <td><strong>${% my_multiply s.last s.shares %}</strong></td>
-                            </tr>
-                        </table>
-                        <div>
-                            <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ s.symbol }}"
-                               class="btn btn-sm btn-primary" target="_blank">Bulls</a>
-                            <a href="https://stockinvest.us/technical-analysis/{{ s.symbol }}"
-                               class="btn btn-sm btn-primary" target="_blank">SI</a>
-                            <a href="http://shortsqueeze.com/?symbol={{ stock.symbol }}"
-                               class="btn btn-sm btn-primary" target="_blank">SS</a>
-                            <a href="http://caps.fool.com/Ticker/{{ s.symbol }}.aspx"
-                               class="btn btn-sm btn-primary" target="_blank">Fool</a>
-                            <a href="http://money.cnn.com/quote/forecast/forecast.html?symb={{ s.symbol }}"
-                               class="btn btn-sm btn-primary" target="_blank">CNN</a>
-                            <a href="https://stocktwits.com/symbol/{{ s.symbol }}/"
-                               class="btn btn-sm btn-primary" target="_blank">ST</a>
-                        </div>
-                        <div>
-                            <span class="small">
-                                <a href="{{ security.security.fundamentals }}" target="_blank">
-                                    Fundamentals</a>
-                                <a href="#" class="copy-data" data-clipboard-text="{{ security.security.fundamentals }}">
-                                    <i class="fa fa-link" aria-hidden="true"></i></a> |
-                                <a href="{{ security.instrument }}" target="_blank">
-                                    Instruments</a>
-                                <a href="#" class="copy-data" data-clipboard-text="{{ security.instrument }}">
-                                    <i class="fa fa-link" aria-hidden="true"></i></a> |
-                                <a href="{{ security.security.quote }}" target="_blank">
-                                    Quote</a>
-                                <a href="#" class="copy-data" data-clipboard-text="{{ security.security.quote }}">
-                                    <i class="fa fa-link" aria-hidden="true"></i></a>
-                            </span>
-                        </div>
-                    </div>
+                        <td>{{ s.shares|round_it:0 }}</td>
 
-                    <div class="card-footer {{ s.daily.class }}">
-                        <div class="float-left">
-                            {{ s.daily.text }}
-                        </div>
-                        <div class="float-right">
-                            ${{ s.daily.total }} (<strong>{{ s.daily.percent }}%</strong>)
-                        </div>
-                    </div>
+                        <td class="text-{{ s.status.class }}">
+                            ${% profit_total s.price s.last s.shares %}
+                        </td>
+                        <td class="text-{{ s.status.class }}">
+                            {% profit_percent s.price s.last s.shares %}% <i class="fas fa-caret-{{ s.status.up }}"></i>
+                        </td>
 
-                </div>
+                        <td><strong>${% my_multiply s.last s.shares %}</strong></td>
 
-            {% endwith %}
-        {% else %}
+                        <td class="text-{{ s.daily.status.class }}">
+                            {{ s.daily.percent }}% <i class="fas fa-caret-{{ s.daily.status.up }}"></i>
+                        </td>
+                        <td class="text-{{ s.daily.status.class }}">
+                            ${{ s.daily.total }}
+                        </td>
+                    </tr>
 
-            <p>Security not found for instrument: {{ security.instrument }}</p>
+                {% endwith %}
+            {% else %}
 
-        {% endif %}
-    </div>
-{% endfor %}
+                <p>Security not found for instrument: {{ security.instrument }}</p>
+
+            {% endif %}
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+</div>

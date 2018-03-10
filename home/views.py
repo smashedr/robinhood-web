@@ -32,8 +32,8 @@ def home_view(request):
             request.session['pw_hash'].encode(),
         )
         rh = Robinhood(token=_token.decode())
-        positions = rh.get_positions()
-        securities = get_securities(positions['results'])
+        stocks = rh.get_stocks()
+        securities = get_securities(stocks)
         account = rh.get_accounts()
         account_number = account['results'][0]['account_number']
         data = {
@@ -110,9 +110,6 @@ def get_securities(securities):
     Loop through securities and create custom dictionary
     """
     for s in securities:
-        logger.info(type(s['quantity']))
-        if s['quantity'] == '0.0000':
-            s['watchlist'] = True
         rhs = get_rh_open(s['instrument'])
         s['security'] = rhs
         q = get_rh_open(s['security']['quote'])
@@ -131,4 +128,3 @@ def get_rh_open(instrument):
         return r.json()
     else:
         return None
-

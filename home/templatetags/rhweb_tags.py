@@ -14,7 +14,7 @@ def parse_security(security):
         'price': security['average_buy_price'],
         'shares': security['quantity'],
         'last': get_last(security['quote']),
-        'class': card_class(security),
+        'status': get_status(security['quote'], security['average_buy_price']),
         'daily': parse_daily(security),
     }
     return s
@@ -30,28 +30,27 @@ def round_it(value, decimal=2):
 @register.simple_tag(name='my_multiply')
 def my_multiply(value1, value2, decimal=2):
     m = float(value1) * float(value2)
-    return round(m, decimal)
+    return '{:,.2f}'.format(m)
 
 
 @register.simple_tag(name='profit_total')
 def profit_total(price, last, shares, decimal=2):
     p = (float(last) * float(shares)) - (float(price) * float(shares))
-    return round(p, decimal)
+    return '{:,.2f}'.format(p)
 
 
 @register.simple_tag(name='profit_percent')
-def profit_percent(price, last, shares, decimal=2):
+def profit_percent(price, last, shares):
     cost = (float(price) * float(shares))
     if int(cost) == 0:
         return 0
     profit = (float(last) * float(shares)) - cost
     if profit > 0:
-        percent = round(profit/cost*100, 2)
+        return '{:.2f}'.format(profit/cost*100)
     elif profit < 0:
-        percent = round(-profit/cost*100, 2)
+        return '-{:.2f}'.format(-profit/cost*100)
     else:
-        percent = 0
-    return round(percent, decimal)
+        return 0
 
 
 @register.simple_tag(name='get_saves')
@@ -61,34 +60,32 @@ def get_saves(value):
     return saved_shares if saved_shares else None
 
 
-def card_class(security):
-    last = get_last(security['quote'])
-    buy = float(security['average_buy_price'])
-    if last >= buy:
-        return 'text-white bg-success'
-    else:
-        return 'text-white bg-danger'
-
-
 def parse_daily(security):
     close = float(security['quote']['previous_close'])
     last = get_last(security['quote'])
-    if last >= close:
-        bs_class = 'bg-success'
-        text = 'Up Today.'
-    else:
-        bs_class = 'bg-danger'
-        text = 'Down Today.'
-
     dollar = profit_total(close, last, security['quantity'])
     percent = profit_percent(close, last, security['quantity'])
     daily = {
-        'class': 'text-white {}'.format(bs_class),
+        'status': get_status(security['quote'], close),
         'total': dollar,
         'percent': percent,
-        'text': text,
     }
     return daily
+
+
+def get_status(quote, average_buy_price):
+    last = get_last(quote)
+    buy = float(average_buy_price)
+    if last >= buy:
+        return {
+            'up': 'up',
+            'class': 'success',
+        }
+    else:
+        return {
+            'up': 'down',
+            'class': 'danger',
+        }
 
 
 def get_last(value, decimal=2):

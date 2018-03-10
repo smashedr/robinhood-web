@@ -13,6 +13,7 @@ class Robinhood(object):
         self.token = token
         self.accounts = None
         self.positions = None
+        self.stocks = None
 
     def get_token(self, username, password, code=None):
         j = self._make_request(
@@ -35,6 +36,19 @@ class Robinhood(object):
             return self.token
         else:
             return False
+
+    def get_stocks(self, refresh=False):
+        if refresh:
+            self.positions = self._get_positions()
+        if not self.positions:
+            self.positions = self._get_positions()
+        self.stocks = []
+        for s in self.positions['results']:
+            if s['quantity'] == '0.0000':
+                continue
+            else:
+                self.stocks.append(s)
+        return self.stocks
 
     def get_accounts(self, refresh=False):
         if refresh:

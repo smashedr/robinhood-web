@@ -59,7 +59,9 @@
                 {% endwith %}
             {% else %}
 
-                <p>Security not found for instrument: {{ security.instrument }}</p>
+                <td colspan="8">
+                    Security not found for instrument: {{ security.instrument }}
+                </td>
 
             {% endif %}
         {% endfor %}

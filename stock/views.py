@@ -15,7 +15,7 @@ def home_view(request):
     """
     View: /stock/
     """
-    return render(request, 'stock-home.html')
+    return render(request, 'stock/home.html')
 
 
 @require_http_methods(['GET'])
@@ -28,7 +28,7 @@ def stock_view(request, symbol=''):
         messages.add_message(
             request, messages.WARNING, message, extra_tags='danger'
         )
-        return render(request, 'stock-search.html')
+        return render(request, 'stock/results.html')
     else:
         symbol = symbol.upper()
         stock = {
@@ -42,7 +42,7 @@ def stock_view(request, symbol=''):
             'ss': parse_ss(symbol),
             'sp': parse_sp(symbol),
         }
-        return render(request, 'stock-search.html', {'stock': stock})
+        return render(request, 'stock/results.html', {'stock': stock})
 
 
 @require_http_methods(['POST'])

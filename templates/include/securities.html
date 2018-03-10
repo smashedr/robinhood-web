@@ -23,11 +23,13 @@
 
                     <tr>
                         <td>
-                            {% if security.security.simple_name == None %}
-                                {{ security.security.name|truncatechars:28 }}
-                            {% else %}
-                                {{ security.security.simple_name|truncatechars:28 }}
-                            {% endif %}
+                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
+                                {% if security.security.simple_name == None %}
+                                    {{ security.security.name|truncatechars:28 }}
+                                {% else %}
+                                    {{ security.security.simple_name|truncatechars:28 }}
+                                {% endif %}
+                            </a>
                         </td>
                         <td>
                             <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
@@ -41,10 +43,10 @@
                             ${% profit_total s.price s.last s.shares %}
                         </td>
                         <td class="text-{{ s.status.class }}">
-                            {% profit_percent s.price s.last s.shares %}% <i class="fas fa-caret-{{ s.status.up }}"></i>
+                            <strong>{% profit_percent s.price s.last s.shares %}% <i class="fas fa-caret-{{ s.status.up }}"></i></strong>
                         </td>
 
-                        <td><strong>${% my_multiply s.last s.shares %}</strong></td>
+                        <td class="text-white">${% my_multiply s.last s.shares %}</td>
 
                         <td class="text-{{ s.daily.status.class }}">
                             {{ s.daily.percent }}% <i class="fas fa-caret-{{ s.daily.status.up }}"></i>

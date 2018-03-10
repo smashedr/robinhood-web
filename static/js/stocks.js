@@ -15,4 +15,6 @@ $(document).ready(function() {
 
     table.buttons().container()
         .appendTo( '#stock-table_wrapper .col-md-6:eq(0)' );
+
+    $( "#stock-table_wrapper :button" ).addClass( "btn-sm" );
 } );

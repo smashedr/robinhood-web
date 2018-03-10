@@ -1,6 +1,8 @@
 import json
 import logging
+from datetime import datetime
 from django import template
+from django.utils.timezone import utc
 from home.models import SaveData
 
 logger = logging.getLogger('app')
@@ -18,6 +20,12 @@ def parse_security(security):
         'daily': parse_daily(security),
     }
     return s
+
+
+@register.filter(name='time_since')
+def time_since(value):
+    since = datetime.utcnow().replace(tzinfo=utc) - value
+    return convert_time(since.seconds)
 
 
 @register.filter(name='round_it')
@@ -95,3 +103,13 @@ def get_last(value, decimal=2):
                 float(value['last_extended_hours_trade_price']), decimal
             )
     return round(float(value['last_trade_price']), decimal)
+
+
+def convert_time(seconds):
+    m, s = divmod(seconds, 60)
+    h, m = divmod(m, 60)
+    if h < 1:
+        o = "%02d minutes %02d seconds" % (m, s)
+    else:
+        o = "%d hours %02d minutes %02d seconds" % (h, m, s)
+    return o

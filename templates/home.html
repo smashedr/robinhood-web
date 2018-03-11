@@ -1,10 +1,14 @@
 {% extends "main.html" %}
+{% load staticfiles %}
 {% block home_active %}active{% endblock %}
 {% block title %}Home{% endblock %}
 {% load rhweb_tags %}
 
 {% block head %}
-	<!-- Place page specific head code here -->
+    <link rel="stylesheet" type="text/css" href="{% static 'datatables/datatables.min.css' %}">
+
+    <script type="text/javascript" src="{% static 'datatables/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/stocks.js' %}"></script>
 {% endblock %}
 
 {% block body %}
@@ -36,7 +40,7 @@
     </div>
 
     <div class="row">
-        {% include 'include/securities.html' with securities=data.securities div_class='col-lg-4' %}
+        {% include 'stock/securities.html' with securities=data.securities %}
     </div>
 
 {% endblock %}

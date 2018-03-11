@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
-from home.views import get_rh
 from home.models import SaveData
+from rhweb.robinhood import Robinhood
 
 logger = logging.getLogger('app')
 
@@ -43,11 +43,13 @@ def do_login(request):
     try:
         _username = request.POST.get('username')
         _password = request.POST.get('password')
-        rh = get_rh(_username, _password)
-        if rh:
+        _code = request.POST.get('code')
+        rh = Robinhood()
+        token = rh.get_token(_username, _password, code=_code)
+        if token:
             if login_user(request, _username):
                 key = gen_key()
-                pw_hash = encode_pw(key, _password)
+                pw_hash = encode_pw(key, token)
                 request.session['pw_hash'] = pw_hash.decode()
                 response = HttpResponseRedirect(get_next_url(request))
                 response.set_cookie('pw_key', key.decode())

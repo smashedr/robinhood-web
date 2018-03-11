@@ -7,7 +7,9 @@
         <tr>
             <th>Name</th>
             <th>Symbol</th>
+            <th>Last</th>
             <th>Shares</th>
+            <th>Cost</th>
             <th>Total Return</th>
             <th>Total Percent</th>
             <th>Equity</th>
@@ -25,32 +27,41 @@
                         <td>
                             <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
                                 {% if security.security.simple_name == None %}
-                                    {{ security.security.name|truncatechars:28 }}
+                                    {{ security.security.name|truncatechars:22 }}
                                 {% else %}
-                                    {{ security.security.simple_name|truncatechars:28 }}
+                                    {{ security.security.simple_name|truncatechars:22 }}
                                 {% endif %}
                             </a>
                         </td>
+
                         <td>
                             <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
                                 {{ s.symbol }}
                             </a>
                         </td>
 
+                        <td class="text-{{ s.daily.status.class }}">
+                            ${{ s.last }}
+                        </td>
+
                         <td>{{ s.shares|round_it:0 }}</td>
 
+                        <td>${{ s.info.cost}}</td>
+
                         <td class="text-{{ s.status.class }}">
-                            ${% profit_total s.price s.last s.shares %}
-                        </td>
-                        <td class="text-{{ s.status.class }}">
-                            <strong>{% profit_percent s.price s.last s.shares %}% <i class="fas fa-caret-{{ s.status.up }}"></i></strong>
+                            ${{ s.info.profit }}
                         </td>
 
-                        <td class="text-white">${% my_multiply s.last s.shares %}</td>
+                        <td class="text-{{ s.status.class }}">
+                            <strong>{{ s.info.percent }}% <i class="fas fa-caret-{{ s.status.up }}"></i></strong>
+                        </td>
+
+                        <td class="text-white">${{ s.info.equity }}</td>
 
                         <td class="text-{{ s.daily.status.class }}">
                             {{ s.daily.percent }}% <i class="fas fa-caret-{{ s.daily.status.up }}"></i>
                         </td>
+
                         <td class="text-{{ s.daily.status.class }}">
                             ${{ s.daily.total }}
                         </td>

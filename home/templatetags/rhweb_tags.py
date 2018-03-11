@@ -11,15 +11,32 @@ register = template.Library()
 
 @register.filter(name='parse_security')
 def parse_security(security):
+    last = get_last(security['quote'])
     s = {
+        'last': '{:,.2f}'.format(last),
         'symbol': security['security']['symbol'],
-        'price': security['average_buy_price'],
         'shares': security['quantity'],
-        'last': get_last(security['quote']),
         'status': get_status(security['quote'], security['average_buy_price']),
         'daily': parse_daily(security),
+        'info': get_info(security, last),
     }
     return s
+
+
+def get_info(security, last):
+    profit = profit_total(
+        security['average_buy_price'], last, security['quantity'],
+    )
+    percent = profit_percent(
+        security['average_buy_price'], last, security['quantity'],
+    )
+    cost = my_multiply(security['average_buy_price'], security['quantity'])
+    return {
+        'cost': cost,
+        'profit': profit,
+        'percent': percent,
+        'equity': my_multiply(last, security['quantity']),
+    }
 
 
 @register.filter(name='time_since')
@@ -33,18 +50,6 @@ def round_it(value, decimal=2):
     if decimal == 0:
         return int(float(value))
     return round(float(value), decimal)
-
-
-@register.simple_tag(name='my_multiply')
-def my_multiply(value1, value2, decimal=2):
-    m = float(value1) * float(value2)
-    return '{:,.2f}'.format(m)
-
-
-@register.simple_tag(name='profit_total')
-def profit_total(price, last, shares, decimal=2):
-    p = (float(last) * float(shares)) - (float(price) * float(shares))
-    return '{:,.2f}'.format(p)
 
 
 @register.simple_tag(name='profit_percent')
@@ -103,6 +108,21 @@ def get_last(value, decimal=2):
                 float(value['last_extended_hours_trade_price']), decimal
             )
     return round(float(value['last_trade_price']), decimal)
+
+
+def profit_total(price, last, shares):
+    p = (float(last) * float(shares)) - (float(price) * float(shares))
+    return '{:,.2f}'.format(p)
+
+
+def my_multiply(value1, value2):
+    m = float(value1) * float(value2)
+    return '{:,.2f}'.format(m)
+
+
+def usd_float(dorrar):
+    s = str(dorrar).replace(',', '')
+    return '{:,.2f}'.format(float(s))
 
 
 def convert_time(seconds):

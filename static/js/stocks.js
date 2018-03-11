@@ -4,11 +4,12 @@ $(document).ready(function() {
         lengthChange: false,
         buttons: [ 'copy', 'excel', 'pdf', 'colvis' ],
         paging: false,
-        "order": [[ 5, 'desc' ]],
+        "order": [[ 7, 'desc' ]],
         "columnDefs": [
             { "orderSequence": [ "asc", "desc" ], "targets": [ 0, 1 ] },
-            { "orderSequence": [ "desc", "asc" ], "targets": [ 2, 3, 4, 5 ] },
-            { "orderable": true, "targets": [0, 1, 2, 3, 4, 5] }
+            { "orderSequence": [ "desc", "asc" ], "targets": [ 3, 4, 5, 6, 7 ] },
+            { "orderable": true, "targets": [ 0, 1, 2, 3, 4, 5, 6, 7 ] },
+            { "visible": false, "targets": [ 1, 4 ] }
             // { "type": "html-num-fmt", "targets": [ 2, 3, 4, 5 ] }
         ]
     } );

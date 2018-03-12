@@ -4,7 +4,7 @@ $(document).ready(function() {
         lengthChange: false,
         buttons: [ 'copy', 'excel', 'pdf', 'colvis' ],
         paging: false,
-        "order": [[ 7, 'desc' ]],
+        "order": [[ 9, 'desc' ]],
         "columnDefs": [
             { "orderSequence": [ "asc", "desc" ], "targets": [ 0, 1 ] },
             { "orderSequence": [ "desc", "asc" ], "targets": [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] },

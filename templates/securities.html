@@ -7,7 +7,6 @@
         <tr>
             <th>Name</th>
             <th>Symbol</th>
-            <th>Last</th>
             <th>Shares</th>
             <th>Average Cost</th>
             <th>Total Cost</th>
@@ -15,6 +14,7 @@
             <th>Total Return</th>
             <th>Total Percent</th>
             <th>Equity</th>
+            <th>Last</th>
             <th>Today Percent</th>
             <th>Today Return</th>
             <th>Today Per Share</th>
@@ -43,10 +43,6 @@
                             </a>
                         </td>
 
-                        <td class="text-{{ s.daily.status.class }}">
-                            ${{ s.last }}
-                        </td>
-
                         <td>{{ s.shares|round_it:0 }}</td>
 
                         <td>${{ security.average_buy_price|usd_float }}</td>
@@ -66,6 +62,10 @@
                         </td>
 
                         <td class="text-white">${{ s.info.equity }}</td>
+
+                        <td class="text-{{ s.daily.status.class }}">
+                            ${{ s.last }}
+                        </td>
 
                         <td class="text-{{ s.daily.status.class }}">
                             {{ s.daily.percent }}% <i class="fas fa-caret-{{ s.daily.status.up }}"></i>

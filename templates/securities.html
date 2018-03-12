@@ -9,12 +9,15 @@
             <th>Symbol</th>
             <th>Last</th>
             <th>Shares</th>
-            <th>Cost</th>
+            <th>Average Cost</th>
+            <th>Total Cost</th>
+            <th>Return Per Share</th>
             <th>Total Return</th>
             <th>Total Percent</th>
             <th>Equity</th>
             <th>Today Percent</th>
             <th>Today Return</th>
+            <th>Today Per Share</th>
         </tr>
         </thead>
         <tbody>
@@ -46,7 +49,13 @@
 
                         <td>{{ s.shares|round_it:0 }}</td>
 
+                        <td>${{ security.average_buy_price|usd_float }}</td>
+
                         <td>${{ s.info.cost}}</td>
+
+                        <td class="text-{{ s.status.class }}">
+                            ${{ s.info.pershare }}
+                        </td>
 
                         <td class="text-{{ s.status.class }}">
                             ${{ s.info.profit }}
@@ -64,6 +73,10 @@
 
                         <td class="text-{{ s.daily.status.class }}">
                             ${{ s.daily.total }}
+                        </td>
+
+                        <td class="text-{{ s.daily.status.class }}">
+                            ${{ s.daily.pershare }}
                         </td>
                     </tr>
 

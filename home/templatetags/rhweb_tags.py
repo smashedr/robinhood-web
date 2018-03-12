@@ -27,6 +27,7 @@ def get_info(security, last):
     profit = profit_total(
         security['average_buy_price'], last, security['quantity'],
     )
+    pershare = profit_total(security['average_buy_price'], last, 1)
     percent = profit_percent(
         security['average_buy_price'], last, security['quantity'],
     )
@@ -34,6 +35,7 @@ def get_info(security, last):
     return {
         'cost': cost,
         'profit': profit,
+        'pershare': pershare,
         'percent': percent,
         'equity': my_multiply(last, security['quantity']),
     }
@@ -50,6 +52,12 @@ def round_it(value, decimal=2):
     if decimal == 0:
         return int(float(value))
     return round(float(value), decimal)
+
+
+@register.filter(name='usd_float')
+def usd_float(value):
+    s = str(value).replace(',', '')
+    return '{:,.2f}'.format(float(s))
 
 
 @register.simple_tag(name='profit_percent')
@@ -77,10 +85,12 @@ def parse_daily(security):
     close = float(security['quote']['previous_close'])
     last = get_last(security['quote'])
     dollar = profit_total(close, last, security['quantity'])
+    pershare = profit_total(close, last, 1)
     percent = profit_percent(close, last, security['quantity'])
     daily = {
         'status': get_status(security['quote'], close),
         'total': dollar,
+        'pershare': pershare,
         'percent': percent,
     }
     return daily
@@ -118,11 +128,6 @@ def profit_total(price, last, shares):
 def my_multiply(value1, value2):
     m = float(value1) * float(value2)
     return '{:,.2f}'.format(m)
-
-
-def usd_float(dorrar):
-    s = str(dorrar).replace(',', '')
-    return '{:,.2f}'.format(float(s))
 
 
 def convert_time(seconds):

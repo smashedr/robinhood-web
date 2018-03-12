@@ -7,9 +7,9 @@ $(document).ready(function() {
         "order": [[ 7, 'desc' ]],
         "columnDefs": [
             { "orderSequence": [ "asc", "desc" ], "targets": [ 0, 1 ] },
-            { "orderSequence": [ "desc", "asc" ], "targets": [ 2, 3, 4, 5, 6, 7, 8, 9 ] },
-            { "orderable": true, "targets": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ] },
-            { "visible": false, "targets": [ 1, 4 ] }
+            { "orderSequence": [ "desc", "asc" ], "targets": [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] },
+            { "orderable": true, "targets": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] },
+            { "visible": false, "targets": [ 1, 4, 5, 6, 12 ] }
             // { "type": "html-num-fmt", "targets": [ 2, 3, 4, 5 ] }
         ]
     } );

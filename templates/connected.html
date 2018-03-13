@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+{% block error_active %}active{% endblock %}
+{% block title %}Error{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col text-center">
+
+            <h1>Success!</h1>
+
+            {% if messages %}
+                <p></p>
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.extra_tags }}" role="alert">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <p class="lead">You now connected. You may close this window.</p>
+        </div>
+    </div>
+
+{% endblock %}

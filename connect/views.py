@@ -6,10 +6,90 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views.decorators.http import require_http_methods
-from home.models import SaveData
+from api.views import do_callback
+from home.models import SaveData, ConnectData
 from rhweb.robinhood import Robinhood
 
 logger = logging.getLogger('app')
+
+
+@require_http_methods(['GET'])
+def connect_success(request):
+    """
+    View  /connected/
+    """
+    if 'is_connected' in request.session:
+        if request.session['is_connected']:
+            return render(request, 'connected.html')
+    return redirect('do_connect')
+
+
+@require_http_methods(['GET'])
+def show_connect(request):
+    """
+    View  /connect/
+    """
+    _id = request.GET.get('id')
+    if not _id:
+        messages.add_message(
+            request, messages.WARNING,
+            'There was an error processing your request. Please try again.',
+            extra_tags='danger',
+        )
+        return render(request, 'error.html')
+    data = {'id': _id}
+    return render(request, 'connect.html', {'data': data})
+
+
+@require_http_methods(['POST'])
+def do_connect(request):
+    """
+    View  /conn/
+    """
+    try:
+        _username = request.POST.get('username')
+        _password = request.POST.get('password')
+        _id = request.POST.get('id')
+        _code = request.POST.get('code')
+        rh = Robinhood()
+        token = rh.get_token(_username, _password, code=_code)
+        if token:
+            conn, created = ConnectData.objects.get_or_create(
+                conn_id=_id, username=_username
+            )
+            if created:
+                r = do_callback(_id)
+                if r.status_code == 200:
+                    request.session['is_connected'] = True
+                    return redirect('connect_success')
+                else:
+                    messages.add_message(
+                        request, messages.WARNING,
+                        'Error: {}'.format(r.content),
+                        extra_tags='danger',
+                    )
+                    return redirect('show_connect')
+            else:
+                conn.username = _username
+                conn.save()
+                request.session['is_connected'] = True
+                return redirect('connect_success')
+
+        else:
+            messages.add_message(
+                request, messages.WARNING,
+                'Incorrect User/Pass. Please Try Again.',
+                extra_tags='danger',
+            )
+            return redirect('show_connect')
+    except Exception as error:
+        logger.exception(error)
+        messages.add_message(
+            request, messages.WARNING,
+            'Error: {}'.format(error),
+            extra_tags='danger',
+        )
+        return redirect('show_connect')
 
 
 @require_http_methods(['GET'])

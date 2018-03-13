@@ -22,3 +22,8 @@ class SaveData(models.Model):
         'Save ID', max_length=255, default='reserved_fore_future_use'
     )
     saved_shares = models.TextField('Saved Shares JSON', default='{}')
+
+
+class ConnectData(models.Model):
+    conn_id = models.CharField('Connect ID', max_length=255, primary_key=True)
+    username = models.CharField('Robinhood Username', max_length=50)

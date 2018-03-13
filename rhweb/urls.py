@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.templatetags.static import static
-from django.urls import path
+from django.urls import path, include
 from django.views.generic.base import RedirectView
 
 import connect.views as connect
@@ -18,7 +18,11 @@ urlpatterns = [
     path('stock/<str:symbol>/', stock.stock_view, name='stock_view'),
     path('search/', stock.stock_search, name='stock_search'),
     path('login/', connect.show_login, name='show_login'),
+    path('connect/', connect.show_connect, name='show_connect'),
+    path('connected/', connect.connect_success, name='connect_success'),
+    path('conn/', connect.do_connect, name='do_connect'),
     path('auth/', connect.do_login, name='do_login'),
     path('logout/', connect.do_logout, name='do_logout'),
+    path('api/', include('api.urls')),
     path('admin/', admin.site.urls, name='django_admin'),
 ]

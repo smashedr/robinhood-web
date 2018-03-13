@@ -70,13 +70,10 @@ def do_connect(request):
                     )
                     return redirect('show_connect')
             else:
-                error = 'Internal server error when creating account.'
-                messages.add_message(
-                    request, messages.WARNING,
-                    'Error: {}'.format(error),
-                    extra_tags='danger',
-                )
-                return redirect('show_connect')
+                conn.username = _username
+                conn.save()
+                request.session['is_connected'] = True
+                return redirect('connect_success')
 
         else:
             messages.add_message(

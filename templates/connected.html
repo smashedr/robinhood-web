@@ -2,24 +2,26 @@
 {% block error_active %}active{% endblock %}
 {% block title %}Error{% endblock %}
 
-{% block head %}
-    <!-- Place page specific head code here -->
-{% endblock %}
+{% block head %}{% endblock %}
 
 {% block body %}
-    <!-- Place page specific body code here -->
 
-    <h1>Success!</h1>
+    <div class="row">
+        <div class="col text-center">
 
-    {% if messages %}
-        <p></p>
-        {% for message in messages %}
-            <div class="alert alert-{{ message.extra_tags }}" role="alert">
-                {{ message|safe }}
-            </div>
-        {% endfor %}
-    {% endif %}
+            <h1>Success!</h1>
 
-    <p class="lead">You are all set...</p>
+            {% if messages %}
+                <p></p>
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.extra_tags }}" role="alert">
+                        {{ message|safe }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <p class="lead">You now connected. You may close this window.</p>
+        </div>
+    </div>
 
 {% endblock %}

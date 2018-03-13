@@ -21,3 +21,8 @@ user            = database
 pass            = xxxxxxxxxx
 host            = mysql
 port            = 3306
+
+[app]
+api_key         = xxxxxxxxxx
+jank_key        = xxxxxxxxxx
+callback_uri    = https://jankbot-api.cssnr.com/robinhood-connect/

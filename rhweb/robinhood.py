@@ -21,7 +21,6 @@ class Robinhood(object):
             username=username,
             password=password,
         )
-        # logger.info(j)
         if 'mfa_required' in j:
             if j['mfa_required']:
                 j = self._make_request(
@@ -30,7 +29,6 @@ class Robinhood(object):
                     password=password,
                     mfa_code=code
                 )
-        # logger.info(j)
         if 'token' in j:
             self.token = j['token']
             return self.token
@@ -91,8 +89,6 @@ class Robinhood(object):
             headers['Authorization'] = 'Token {}'.format(token)
         if method == 'post':
             r = requests.post(url, data=data, headers=headers)
-            # logger.info('r.status_code: {}'.format(r.status_code))
-            # logger.info('r.content: {}'.format(r.content))
             return r.json()
         elif method == 'get':
             r = requests.get(url, params=data, headers=headers)

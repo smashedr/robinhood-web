@@ -10,45 +10,33 @@ register = template.Library()
 
 
 @register.filter(name='parse_security')
-def parse_security(security):
-    last = get_last(security['quote'])
+def parse_security(value):
+    if not value:
+        return None
+    last = get_last(value['quote'])
     s = {
         'last': '{:,.2f}'.format(last),
-        'symbol': security['security']['symbol'],
-        'shares': security['quantity'],
-        'status': get_status(security['quote'], security['average_buy_price']),
-        'daily': parse_daily(security),
-        'info': get_info(security, last),
+        'symbol': value['security']['symbol'],
+        'shares': value['quantity'],
+        'status': get_status(value['quote'], value['average_buy_price']),
+        'daily': parse_daily(value),
+        'info': get_info(value, last),
     }
     return s
 
 
-def get_info(security, last):
-    profit = profit_total(
-        security['average_buy_price'], last, security['quantity'],
-    )
-    pershare = profit_total(security['average_buy_price'], last, 1)
-    percent = profit_percent(
-        security['average_buy_price'], last, security['quantity'],
-    )
-    cost = my_multiply(security['average_buy_price'], security['quantity'])
-    return {
-        'cost': cost,
-        'profit': profit,
-        'pershare': pershare,
-        'percent': percent,
-        'equity': my_multiply(last, security['quantity']),
-    }
-
-
 @register.filter(name='time_since')
 def time_since(value):
+    if not value:
+        return None
     since = datetime.utcnow().replace(tzinfo=utc) - value
     return convert_time(since.seconds)
 
 
 @register.filter(name='round_it')
 def round_it(value, decimal=2):
+    if not value:
+        return None
     if decimal == 0:
         return int(float(value))
     return round(float(value), decimal)
@@ -56,6 +44,8 @@ def round_it(value, decimal=2):
 
 @register.filter(name='usd_float')
 def usd_float(value):
+    if not value:
+        return None
     s = str(value).replace(',', '')
     return '{:,.2f}'.format(float(s))
 
@@ -79,6 +69,24 @@ def get_saves(value):
     s = SaveData.objects.get(save_owner=value)
     saved_shares = json.loads(s.saved_shares)
     return saved_shares if saved_shares else None
+
+
+def get_info(security, last):
+    profit = profit_total(
+        security['average_buy_price'], last, security['quantity'],
+    )
+    pershare = profit_total(security['average_buy_price'], last, 1)
+    percent = profit_percent(
+        security['average_buy_price'], last, security['quantity'],
+    )
+    cost = my_multiply(security['average_buy_price'], security['quantity'])
+    return {
+        'cost': cost,
+        'profit': profit,
+        'pershare': pershare,
+        'percent': percent,
+        'equity': my_multiply(last, security['quantity']),
+    }
 
 
 def parse_daily(security):

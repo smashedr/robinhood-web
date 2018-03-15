@@ -1,7 +1,6 @@
 from datetime import datetime
 import json
 import logging
-import requests
 import requests_cache
 import uuid
 from rhweb.shared import decode_pw, get_next_url
@@ -33,9 +32,7 @@ def home_view(request):
             request.session['pw_hash'].encode(),
         )
         rh = Robinhood(token=_token.decode())
-        stocks = rh.get_stocks()
-        securities = get_securities(stocks)
-        # account = rh.get_accounts()
+        securities = rh.get_securities()
         try:
             s = ShareData.objects.get(share_owner=request.user.username)
         except:
@@ -115,28 +112,3 @@ def save_share(request):
             extra_tags='danger',
         )
         return redirect(get_next_url(request))
-
-
-def get_securities(securities):
-    """
-    Loop through securities and create custom dictionary
-    """
-    for s in securities:
-        rhs = get_rh_open(s['instrument'])
-        s['security'] = rhs
-        q = get_rh_open(s['security']['quote'])
-        s['quote'] = q
-        # f = get_rh_open(s['security']['fundamentals'])
-        # s['fundamentals'] = f
-    return securities
-
-
-def get_rh_open(instrument):
-    """
-    Query an open Robinhood endpoint for json data
-    """
-    r = requests.get(instrument, timeout=3)
-    if r.status_code == 200:
-        return r.json()
-    else:
-        return None

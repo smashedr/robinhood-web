@@ -8,75 +8,91 @@ class Robinhood(object):
     url_auth = 'https://api.robinhood.com/api-token-auth/'
     url_accounts = 'https://api.robinhood.com/accounts/'
     url_positions = 'https://api.robinhood.com/positions/'
+    url_quotes = 'https://api.robinhood.com/quotes/'
 
     def __init__(self, token=None):
         self.token = token
-        self.accounts = None
-        self.positions = None
-        self.stocks = None
+        self.accounts = {}
+        self.positions = {}
+        self.stocks = []
+        self.symbols = []
+        self.quotes = []
 
     def get_token(self, username, password, code=None):
-        j = self._make_request(
+        d = self._make_request(
             self.url_auth,
             username=username,
             password=password,
         )
-        if 'mfa_required' in j:
-            if j['mfa_required']:
-                j = self._make_request(
+        if 'mfa_required' in d:
+            if d['mfa_required']:
+                d.clear()
+                d = self._make_request(
                     self.url_auth,
                     username=username,
                     password=password,
                     mfa_code=code
                 )
-        if 'token' in j:
-            self.token = j['token']
+        if 'token' in d:
+            self.token = d['token']
             return self.token
         else:
             return False
 
-    def get_stocks(self, refresh=False):
-        if refresh:
-            self.positions = self._get_positions()
-        if not self.positions:
-            self.positions = self._get_positions()
-        self.stocks = []
-        for s in self.positions['results']:
-            if s['quantity'] == '0.0000':
-                continue
-            else:
-                self.stocks.append(s)
+    def get_securities(self):
+        self._get_positions()
+        self._get_stocks()
+        for s in self.stocks:
+            s['security'] = self._make_request(
+                s['instrument'],
+                token=self.token,
+                method='get',
+            )
+            s['symbol'] = s['security']['symbol']
+            self.symbols.append(s['symbol'])
+        self._get_quotes()
+        for s in self.stocks:
+            s['quote'] = self._return_quote(s['instrument'])
+        # s['security']['fundamentals']
         return self.stocks
 
-    def get_accounts(self, refresh=False):
-        if refresh:
-            self.accounts = self._get_accounts()
-        if not self.accounts:
-            self.accounts = self._get_accounts()
-        return self.accounts
+    def _return_quote(self, instrument):
+        for q in self.quotes:
+            if q['instrument'] == instrument:
+                return q
+        return None
+
+    def _get_quotes(self):
+        symbols = ','.join(self.symbols)
+        d = self._make_request(
+            self.url_quotes,
+            token=self.token,
+            method='get',
+            symbols=symbols,
+        )
+        self.quotes = d['results']
+
+    def _get_stocks(self):
+        self.stocks.clear()
+        for s in self.positions['results']:
+            if s['quantity'] != '0.0000':
+                self.stocks.append(s)
 
     def _get_accounts(self):
-        j = self._make_request(
+        self.accounts.clear()
+        self.accounts = self._make_request(
             self.url_accounts,
             token=self.token,
             method='get',
         )
-        return j
-
-    def get_positions(self, refresh=False):
-        if refresh:
-            self.positions = self._get_positions()
-        if not self.positions:
-            self.positions = self._get_positions()
-        return self.positions
 
     def _get_positions(self):
-        j = self._make_request(
+        self.positions.clear()
+        self.positions = self._make_request(
             self.url_positions,
             token=self.token,
             method='get',
         )
-        return j
 
     @staticmethod
     def _make_request(url, token=None, method='post', **kwargs):
@@ -89,9 +105,11 @@ class Robinhood(object):
             headers['Authorization'] = 'Token {}'.format(token)
         if method == 'post':
             r = requests.post(url, data=data, headers=headers)
+            # logger.info(r.content.decode())
             return r.json()
         elif method == 'get':
             r = requests.get(url, params=data, headers=headers)
+            # logger.info(r.content.decode())
             return r.json()
         else:
             raise ValueError('Unknown method.')

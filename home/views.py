@@ -3,6 +3,7 @@ import json
 import logging
 import requests
 import requests_cache
+import uuid
 from rhweb.shared import decode_pw, get_next_url
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -34,17 +35,20 @@ def home_view(request):
         rh = Robinhood(token=_token.decode())
         stocks = rh.get_stocks()
         securities = get_securities(stocks)
-        account = rh.get_accounts()
-        account_number = account['results'][0]['account_number']
+        # account = rh.get_accounts()
+        try:
+            s = ShareData.objects.get(share_owner=request.user.username)
+        except:
+            s = ShareData(
+                share_owner=request.user.username,
+                share_id=uuid.uuid4().hex[:12].upper(),
+            )
         data = {
             'securities': securities,
-            'share_id': account_number,
+            'share_id': s.share_id,
         }
         j = json.dumps(securities)
-        ShareData.objects.get_or_create(share_owner=request.user.username)
-        s = ShareData.objects.get(share_owner=request.user.username)
         s.securities = j
-        s.share_id = account_number
         s.generated_at = datetime.now()
         s.save()
         return render(request, 'home.html', {'data': data})
@@ -63,7 +67,16 @@ def share_view(request, share_id):
     """
     View  /share/<share_id>/
     """
-    s = ShareData.objects.get(share_id=share_id)
+    try:
+        s = ShareData.objects.get(share_id=share_id)
+    except:
+        messages.add_message(
+            request, messages.WARNING,
+            'Share not found.',
+            extra_tags='danger',
+        )
+        return render(request, 'share.html', {'data': None})
+
     securities = json.loads(s.securities)
     data = {
         'securities': securities,

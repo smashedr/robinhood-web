@@ -69,6 +69,13 @@ def share_view(request, share_id):
     """
     try:
         s = ShareData.objects.get(share_id=share_id)
+        securities = json.loads(s.securities)
+        data = {
+            'securities': securities,
+            'generated_at': s.generated_at,
+            'share_id': share_id,
+        }
+        return render(request, 'share.html', {'data': data})
     except:
         messages.add_message(
             request, messages.WARNING,
@@ -76,14 +83,6 @@ def share_view(request, share_id):
             extra_tags='danger',
         )
         return render(request, 'share.html', {'data': None})
-
-    securities = json.loads(s.securities)
-    data = {
-        'securities': securities,
-        'generated_at': s.generated_at,
-        'share_id': share_id,
-    }
-    return render(request, 'share.html', {'data': data})
 
 
 @require_http_methods(["POST"])

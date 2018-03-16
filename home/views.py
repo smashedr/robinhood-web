@@ -1,7 +1,6 @@
 from datetime import datetime
 import json
 import logging
-import requests_cache
 import uuid
 from rhweb.shared import decode_pw, get_next_url
 from django.contrib import messages
@@ -13,8 +12,6 @@ from home.models import ShareData, SaveData
 from rhweb.robinhood import Robinhood
 
 logger = logging.getLogger('app')
-
-requests_cache.install_cache('rh-requests', backend='sqlite', expire_after=120)
 
 
 @login_required

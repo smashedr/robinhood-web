@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from rhweb.shared import parse_bulls, parse_si, parse_cnn, parse_ss, parse_sp
 import logging
@@ -30,7 +31,7 @@ def stock_view(request, symbol=''):
         )
         return render(request, 'stock/results.html')
     else:
-        symbol = symbol.upper()
+        symbol = symbol.upper().strip()
         stock = {
             'symbol': symbol,
             'tv': {
@@ -45,12 +46,13 @@ def stock_view(request, symbol=''):
         return render(request, 'stock/results.html', {'stock': stock})
 
 
+@csrf_exempt
 @require_http_methods(['POST'])
 def stock_search(request):
     """
     View: /stock/search/
     """
-    symbol = request.POST.get('symbol').upper()
+    symbol = request.POST.get('symbol').upper().strip()
     if not symbol:
         symbol = 'AMZN'
     return redirect('/stock/{}'.format(symbol))

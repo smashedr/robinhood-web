@@ -12,25 +12,19 @@
     <meta property="og:image:type" content="image/png">
 {% endblock %}
 
-{% block head %}{% endblock %}
+{% block head %}
+    <style type="text/css">
+        .tv-widget-chart__header {
+            visibility: hidden !important;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
 
-    <div class="row">
-        <div class="col text-center m-2">
-
-            <h1>{{ stock.symbol }}</h1>
-
-            <form method="post" action="{% url 'stock_search' %}">
-                {% csrf_token %}
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="{{ stock.symbol }}" name="symbol" required>
-                    <span class="input-group-btn">
-                        <button class="btn btn-secondary" type="submit">Search</button>
-                    </span>
-                </div>
-            </form>
-
+    <div class="row mt-2 mb-2">
+        <div class="col">
+            {% include 'include/stock-overview.html' with symbol=stock.symbol %}
         </div>
     </div>
 

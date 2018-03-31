@@ -12,11 +12,12 @@ class Robinhood(object):
 
     def __init__(self, token=None):
         self.token = token
-        self.accounts = {}
+        # self.accounts = {}
         self.positions = {}
-        self.stocks = []
+        self.securities = {}
+        # self.stocks = []
         self.symbols = []
-        self.quotes = []
+        # self.quotes = []
 
     def get_token(self, username, password, code=None):
         d = self._make_request(
@@ -41,50 +42,55 @@ class Robinhood(object):
 
     def get_securities(self):
         self._get_positions()
-        self._get_stocks()
-        for s in self.stocks:
-            s['security'] = self._make_request(
+        self.securities.clear()
+        # self._get_stocks()
+        for s in self.positions['results']:
+            security = self._make_request(
                 s['instrument'],
                 token=self.token,
                 method='get',
             )
-            s['symbol'] = s['security']['symbol']
-            self.symbols.append(s['symbol'])
-        self._get_quotes()
-        for s in self.stocks:
-            s['quote'] = self._return_quote(s['instrument'])
+            # s['symbol'] = s['security']['symbol']
+            self.securities[security['symbol']] = {
+                'security': security,
+                'position': s,
+            }
+            self.symbols.append(security['symbol'])
+        # self._get_quotes()
+        # for s in self.stocks:
+        #     s['quote'] = self._return_quote(s['instrument'])
         # s['security']['fundamentals']
-        return self.stocks
+        return self.securities
 
-    def _return_quote(self, instrument):
-        for q in self.quotes:
-            if q['instrument'] == instrument:
-                return q
-        return None
+    # def _return_quote(self, instrument):
+    #     for q in self.quotes:
+    #         if q['instrument'] == instrument:
+    #             return q
+    #     return None
 
-    def _get_quotes(self):
-        symbols = ','.join(self.symbols)
-        d = self._make_request(
-            self.url_quotes,
-            token=self.token,
-            method='get',
-            symbols=symbols,
-        )
-        self.quotes = d['results']
+    # def _get_quotes(self):
+    #     symbols = ','.join(self.symbols)
+    #     d = self._make_request(
+    #         self.url_quotes,
+    #         token=self.token,
+    #         method='get',
+    #         symbols=symbols,
+    #     )
+    #     self.quotes = d['results']
 
-    def _get_stocks(self):
-        self.stocks.clear()
-        for s in self.positions['results']:
-            if s['quantity'] != '0.0000':
-                self.stocks.append(s)
+    # def _get_stocks(self):
+    #     self.stocks.clear()
+    #     for s in self.positions['results']:
+    #         if s['quantity'] != '0.0000':
+    #             self.stocks.append(s)
 
-    def _get_accounts(self):
-        self.accounts.clear()
-        self.accounts = self._make_request(
-            self.url_accounts,
-            token=self.token,
-            method='get',
-        )
+    # def _get_accounts(self):
+    #     self.accounts.clear()
+    #     self.accounts = self._make_request(
+    #         self.url_accounts,
+    #         token=self.token,
+    #         method='get',
+    #     )
 
     def _get_positions(self):
         self.positions.clear()

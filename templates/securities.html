@@ -1,5 +1,10 @@
 {% load rhweb_tags %}
 
+{% for symbol, security in securities.items %}
+    {{ symbol }} <br>
+    {{ security }}
+{% endfor %}
+
 <div class="col">
 
     <table id="stock-table" class="table table-striped table-bordered" width="100%" cellspacing="0">
@@ -22,13 +27,12 @@
         </thead>
         <tbody>
 
-        {% for security in data.securities %}
+        {% for symbol, security in securities.items %}
             {% if security.security %}
-                {% with s=security|parse_security %}
 
-                    <tr>
+                    <tr id="tr-{{ symbol }}">
                         <td>
-                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
+                            <a href="{% url 'stock_view' symbol=symbol %}" target="_blank">
                                 {% if security.security.simple_name == None %}
                                     {{ security.security.name|truncatechars:22 }}
                                 {% else %}
@@ -38,16 +42,16 @@
                         </td>
 
                         <td>
-                            <a href="{% url 'stock_view' symbol=s.symbol %}" target="_blank">
-                                {{ s.symbol }}
+                            <a href="{% url 'stock_view' symbol=symbol %}" target="_blank">
+                                {{ symbol }}
                             </a>
                         </td>
 
-                        <td>{{ s.shares|round_it:0 }}</td>
+                        <td>{{ security.position.quantity|round_it:0 }}</td>
 
-                        <td>${{ security.average_buy_price|usd_float }}</td>
+                        <td>${{ security.position.average_buy_price|usd_float }}</td>
 
-                        <td>${{ s.info.cost}}</td>
+                        <td id="cost-{{ s.symbol }}">${{ s.info.cost}}</td>
 
                         <td class="text-{{ s.status.class }}">
                             ${{ s.info.pershare }}
@@ -58,13 +62,13 @@
                         </td>
 
                         <td class="text-{{ s.status.class }}">
-                            <strong>{{ s.info.percent }}%
+                            <strong>{{ s.info.percent }}%</strong>
                         </td>
 
                         <td class="text-white">${{ s.info.equity }}</td>
 
-                        <td class="text-{{ s.daily.status.class }}">
-                            ${{ s.last }}
+                        <td class="" id="last-{{ symbol }}">
+                            Loading
                         </td>
 
                         <td class="text-{{ s.daily.status.class }}">
@@ -80,7 +84,6 @@
                         </td>
                     </tr>
 
-                {% endwith %}
             {% else %}
 
                 <td colspan="8">

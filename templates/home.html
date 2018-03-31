@@ -9,6 +9,8 @@
 
     <script type="text/javascript" src="{% static 'datatables/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/stocks.js' %}"></script>
+    <script>var securities = '{{ data.securities_j|safe }}';</script>
+    <script type="text/javascript" src="{% static 'js/rh.js' %}"></script>
 {% endblock %}
 
 {% block body %}

@@ -37,11 +37,14 @@ def home_view(request):
                 share_owner=request.user.username,
                 share_id=uuid.uuid4().hex[:12].upper(),
             )
+        j = json.dumps(securities)
+        logger.info(j)
         data = {
+            'symbols': ','.join(rh.symbols),
             'securities': securities,
+            'securities_j': j,
             'share_id': s.share_id,
         }
-        j = json.dumps(securities)
         s.securities = j
         s.generated_at = datetime.now()
         s.save()

@@ -12,23 +12,17 @@
     <meta property="og:image:type" content="image/png">
 {% endblock %}
 
-{% block head %}
-    <style type="text/css">
-        .tv-widget-chart__header {
-            visibility: hidden !important;
-        }
-    </style>
-{% endblock %}
+{% block head %}{% endblock %}
 
 {% block body %}
 
-    <div class="row mt-2 mb-2">
+    <div class="row">
         <div class="col">
             {% include 'include/stock-overview.html' with symbol=stock.symbol %}
         </div>
     </div>
 
-    <div class="row">
+    <div class="row mt-2">
         <div class="col text-center">
 
             <a href="https://www.americanbulls.com/SignalPage.aspx?lang=en&Ticker={{ stock.symbol }}"
@@ -109,50 +103,9 @@
 
     </div>
 
-    <div class="row">
-        <div class="col mt-2">
-
-            {% if stock.tv.market %}
-                <!-- TradingView Widget BEGIN -->
-                <div class="tradingview-widget-container">
-                    <div id="tradingview_8abd7"></div>
-                    <div class="tradingview-widget-copyright">
-                        <a href="https://tradingview.com/symbols/{{ stock.tv.market }}-{{ stock.symbol }}/" rel="noopener" target="_blank">
-                                <span class="blue-text">
-                                    {{ stock.symbol }}
-                                </span>
-                        </a>
-                    </div>
-                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                    <script type="text/javascript">
-                        new TradingView.widget(
-                                {
-                                    "width": '100%',
-                                    "height": 680,
-                                    "symbol": "{{ stock.tv.market }}:{{ stock.symbol }}",
-                                    "interval": "15",
-                                    "timezone": "exchange",
-                                    "theme": "Dark",
-                                    "style": "1",
-                                    "locale": "en",
-                                    "toolbar_bg": "#f1f3f6",
-                                    "enable_publishing": false,
-                                    "allow_symbol_change": true,
-                                    "hideideas": true,
-                                    "studies": [
-                                        "RSI@tv-basicstudies",
-                                        "MACD@tv-basicstudies"
-                                    ],
-                                    "container_id": "tradingview_8abd7"
-                                }
-                        );
-                    </script>
-                </div>
-                <!-- TradingView Widget END -->
-            {% else %}
-                <p>Symbol not found on Trading View: {{ stock.tv.market }}:{{ stock.symbol }}</p>
-            {% endif %}
-
+    <div class="row mt-2">
+        <div class="col">
+            {% include 'include/stock-graph.html' with symbol=stock.symbol %}
         </div>
     </div>
 

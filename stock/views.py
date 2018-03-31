@@ -5,7 +5,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from rhweb.shared import parse_bulls, parse_si, parse_cnn, parse_ss, parse_sp
 import logging
-import requests
 
 logger = logging.getLogger('app')
 config = settings.CONFIG
@@ -34,9 +33,6 @@ def stock_view(request, symbol=''):
         symbol = symbol.upper().strip()
         stock = {
             'symbol': symbol,
-            'tv': {
-                'market': get_trading_view_market(symbol),
-            },
             'bulls': parse_bulls(symbol),
             'si': parse_si(symbol),
             'cnn': parse_cnn(symbol),
@@ -56,15 +52,3 @@ def stock_search(request):
     if not symbol:
         symbol = 'AMZN'
     return redirect('/stock/{}'.format(symbol))
-
-
-def get_trading_view_market(symbol):
-    url = 'https://www.tradingview.com/symbols/NYSE-{}/'.format(symbol)
-    r = requests.head(url, timeout=3)
-    if r.status_code == 200:
-        return 'NYSE'
-    url = 'https://www.tradingview.com/symbols/NASDAQ-{}/'.format(symbol)
-    r = requests.head(url, timeout=3)
-    if r.status_code == 200:
-        return 'NASDAQ'
-    return None

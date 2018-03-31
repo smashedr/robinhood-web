@@ -16,21 +16,27 @@
 
 {% block body %}
 
-    <div class="row">
-        <div class="col text-center m-2">
+    <div class="row mt-2">
+        <div class="col text-center">
 
             <h1>{{ stock.symbol }}</h1>
 
             <form method="post" action="{% url 'stock_search' %}">
                 {% csrf_token %}
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Stock Symbol. Example: AAPL" name="symbol" required>
+                    <input type="text" class="form-control" placeholder="Stock Symbol. Example: AAPL" name="symbol" required autofocus>
                     <span class="input-group-btn">
                         <button class="btn btn-secondary" type="submit">Search</button>
                     </span>
                 </div>
             </form>
 
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col">
+            {% include 'include/market-overview.html' %}
         </div>
     </div>
 

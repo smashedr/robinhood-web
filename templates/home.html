@@ -9,16 +9,13 @@
 
     <script type="text/javascript" src="{% static 'datatables/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/stocks.js' %}"></script>
-    <script type="text/css">
-        .tradingview-widget-container { margin-top: -20px !important; }
-    </script>
 {% endblock %}
 
 {% block body %}
 
     {% get_saves request.user.username as saves %}
 
-    <div class="row">
+    <div class="row mt-2">
         <div class="col">
             <div class="float-left">
                 Share: <a target="_blank"

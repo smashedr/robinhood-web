@@ -38,6 +38,7 @@ def home_view(request):
                 share_id=uuid.uuid4().hex[:12].upper(),
             )
         data = {
+            'symbols': rh.symbols,
             'securities': securities,
             'share_id': s.share_id,
         }

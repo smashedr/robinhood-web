@@ -34,7 +34,15 @@
     </div>
 
     <div class="row">
-        {% include 'securities.html' with securities=data.securities %}
+        <div class="col">
+            {% include 'securities.html' with securities=data.securities %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {% include 'include/tradingview-overview.html' with symbols=data.symbols %}
+        </div>
     </div>
 
 {% endblock %}

@@ -50,6 +50,15 @@ def usd_float(value):
     return '{:,.2f}'.format(float(s))
 
 
+@register.filter(name='get_tv_symbols')
+def get_tv_symbols(value):
+    symbols = []
+    for s in value:
+        d = {'s': s, 'd': s}
+        symbols.append(d)
+    return json.dumps(symbols)
+
+
 @register.simple_tag(name='profit_percent')
 def profit_percent(price, last, shares):
     cost = (float(price) * float(shares))

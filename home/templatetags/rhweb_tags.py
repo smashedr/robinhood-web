@@ -54,7 +54,7 @@ def usd_float(value):
 def get_tv_symbols(value):
     symbols = []
     for s in value:
-        d = {'s': s, 'd': s}
+        d = {'s': s['symbol'], 'd': s['symbol']}
         symbols.append(d)
     return json.dumps(symbols)
 

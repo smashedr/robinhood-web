@@ -58,8 +58,17 @@
     </div>
 
     <div class="row">
-        {% include 'securities.html' with securities=data.securities %}
+        <div class="col">
+            {% include 'securities.html' %}
+        </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+            {% include 'include/tradingview-overview.html' %}
+        </div>
+    </div>
+
 
     <!-- Modals -->
     <div class="modal fade" id="save-modal" tabindex="-1" role="dialog" aria-labelledby="save-modal" aria-hidden="true">

@@ -27,7 +27,7 @@
             </div>
             <div class="float-right">
 
-                {% include 'include/save-dropdown.html' with saves=saves %}
+                {% include 'include/save-dropdown.html' %}
 
             </div>
         </div>
@@ -35,13 +35,13 @@
 
     <div class="row">
         <div class="col">
-            {% include 'securities.html' with securities=data.securities %}
+            {% include 'securities.html' %}
         </div>
     </div>
 
     <div class="row">
         <div class="col">
-            {% include 'include/tradingview-overview.html' with symbols=data.symbols %}
+            {% include 'include/tradingview-overview.html' %}
         </div>
     </div>
 

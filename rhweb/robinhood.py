@@ -109,7 +109,10 @@ class Robinhood(object):
             return r.json()
         elif method == 'get':
             r = requests.get(url, params=data, headers=headers)
-            # logger.info(r.content.decode())
-            return r.json()
+            logger.info(r.content.decode())
+            if r.status_code == 200:
+                return r.json()
+            else:
+                raise ValueError(r.content.decode()[:100])
         else:
             raise ValueError('Unknown method.')
